@@ -1,3 +1,5 @@
+import { emitXrEvent, resolveRig } from './core-utils.js';
+
 AFRAME.registerComponent('world-grab', {
     schema: {
         event: { type: 'string', default: 'gripdown' },   // start event
@@ -16,6 +18,9 @@ AFRAME.registerComponent('world-grab', {
         this.delta = new THREE.Vector3();
         this.lastLocalPos = new THREE.Vector3();
         this._rigWorldPos = new THREE.Vector3();
+        this._worldFrom = new THREE.Vector3();
+        this._worldTo = new THREE.Vector3();
+        this._worldDelta = new THREE.Vector3();
 
         // bind handlers once so we can add/remove the same function reference
         this._onStart = this._onStart.bind(this);
@@ -60,15 +65,13 @@ AFRAME.registerComponent('world-grab', {
         // Convert this local delta (in rig-local frame) to a world-space displacement
         // worldFrom = rig.localToWorld(0,0,0)
         // worldTo = rig.localToWorld(delta)
-        const worldFrom = new THREE.Vector3();
-        const worldTo = new THREE.Vector3();
-        this.rig.object3D.localToWorld(worldFrom.set(0, 0, 0));
-        this.rig.object3D.localToWorld(worldTo.copy(this.delta));
-        const worldDelta = worldTo.sub(worldFrom);
+        this.rig.object3D.localToWorld(this._worldFrom.set(0, 0, 0));
+        this.rig.object3D.localToWorld(this._worldTo.copy(this.delta));
+        this._worldDelta.copy(this._worldTo).sub(this._worldFrom);
 
         // apply to rig world position
         this.rig.object3D.getWorldPosition(this._rigWorldPos);
-        this._rigWorldPos.add(worldDelta);
+        this._rigWorldPos.add(this._worldDelta);
 
         if (this.rig.object3D.parent) {
             const localPos = this.rig.object3D.parent.worldToLocal(this._rigWorldPos.clone());
@@ -78,10 +81,10 @@ AFRAME.registerComponent('world-grab', {
         }
 
         // emit per-frame event for external listeners
-        this.el.emit('worldgrabmove', {
+        emitXrEvent(this.el, 'world-grab-move', {
             delta: { x: this.delta.x, y: this.delta.y, z: this.delta.z },
             speed: this.data.speed
-        });
+        }, 'worldgrabmove');
 
         // store for next frame
         this.lastLocalPos.copy(currLocal);
@@ -91,13 +94,7 @@ AFRAME.registerComponent('world-grab', {
 
     // --- private helpers ---
     _resolveRig: function () {
-        if (this.data.cameraRig) {
-            this.rig = document.querySelector(this.data.cameraRig);
-            return;
-        }
-        // find the scene camera, then use its parent as the rig
-        const cam = (document.querySelector('[camera]') || document.querySelector('a-camera'));
-        this.rig = cam ? cam.parentEl : null;
+        this.rig = resolveRig(this.el, this.data.cameraRig || null);
         if (!this.rig) console.warn('[world-grab] No camera rig found. Pass cameraRig selector.');
     },
 
@@ -124,12 +121,12 @@ AFRAME.registerComponent('world-grab', {
         // initialize local tracking to prevent contamination from rig movement
         this.lastLocalPos.copy(this.el.object3D.position);
         this.grabbing = true;
-        this.el.emit('worldgrabstart', { rig: this.rig });
+        emitXrEvent(this.el, 'world-grab-start', { rig: this.rig }, 'worldgrabstart');
     },
 
     _onEnd: function () {
         if (!this.grabbing) return;
         this.grabbing = false;
-        this.el.emit('worldgrabend', { rig: this.rig });
+        emitXrEvent(this.el, 'world-grab-end', { rig: this.rig }, 'worldgrabend');
     }
 });

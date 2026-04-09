@@ -7,7 +7,12 @@ AFRAME.registerComponent('passthrough-toggle', {
   envElm: null,
   _lastToggle: 0,
   init() {
-    this.el.addEventListener(this.data.event, this.toggle.bind(this));
+    this._onToggle = this.toggle.bind(this);
+    this.el.addEventListener(this.data.event, this._onToggle);
+  },
+
+  remove() {
+    this.el.removeEventListener(this.data.event, this._onToggle);
   },
 
   toggle(e) {
@@ -21,6 +26,7 @@ AFRAME.registerComponent('passthrough-toggle', {
 
   enable() {
     this.envElm = document.querySelector("[environment]");
+    if (!this.envElm) return;
 
     this.saves["environment"] = this.envElm.getAttribute("environment");
     this.envElm.removeAttribute("environment");
@@ -30,6 +36,7 @@ AFRAME.registerComponent('passthrough-toggle', {
   },
 
   disable() {
+    if (!this.envElm) return;
     this.envElm.setAttribute("environment", this.saves["environment"])
 
     this.enabled = false;

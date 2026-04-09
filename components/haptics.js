@@ -1,12 +1,32 @@
+import { emitXrEvent } from './core-utils.js';
+
 AFRAME.registerComponent('haptics', {
   schema: {
-    intensity: {default: 0.6}, 
-    duration: {default: 30}
+    intensity: { default: 0.6 },
+    duration: { default: 30 }
   },
 
   init() {
-    this.el.addEventListener('haptic-pulse', (e) => this.pulse(e.detail));
-    this.el.addEventListener('haptic-burst', (e) => this.burst(e.detail));
+    this._timers = [];
+    this._onPulse = (e) => this.pulse(e.detail || {});
+    this._onBurst = (e) => this.burst(e.detail || {});
+
+    this.el.addEventListener('haptic-pulse', this._onPulse);
+    this.el.addEventListener('haptic-burst', this._onBurst);
+    this.el.addEventListener('xr:haptics-pulse', this._onPulse);
+    this.el.addEventListener('xr:haptics-burst', this._onBurst);
+  },
+
+  remove() {
+    this.el.removeEventListener('haptic-pulse', this._onPulse);
+    this.el.removeEventListener('haptic-burst', this._onBurst);
+    this.el.removeEventListener('xr:haptics-pulse', this._onPulse);
+    this.el.removeEventListener('xr:haptics-burst', this._onBurst);
+
+    for (let i = 0; i < this._timers.length; i++) {
+      clearTimeout(this._timers[i]);
+    }
+    this._timers.length = 0;
   },
 
   getActuator() {
@@ -31,6 +51,8 @@ AFRAME.registerComponent('haptics', {
         weakMagnitude: intensity
       });
     }
+
+    emitXrEvent(this.el, 'haptics-fired', { intensity, duration });
   },
 
   burst(options = {}) {
@@ -43,8 +65,10 @@ AFRAME.registerComponent('haptics', {
     const doPulse = () => {
       if (pulseCount++ >= count) return;
       this.pulse({ intensity, duration });
-      setTimeout(doPulse, gap);
+      const id = setTimeout(doPulse, gap);
+      this._timers.push(id);
     };
+
     doPulse();
   }
 });

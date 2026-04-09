@@ -1,3 +1,5 @@
+import { applyDeadzone, coerceAxisEvent, emitXrEvent, resolveCamera, resolveRig } from './core-utils.js';
+
 AFRAME.registerComponent('smooth-move', {
     schema: {
         speed: { type: 'number', default: 3 },     // meters/sec at full deflection
@@ -37,8 +39,8 @@ AFRAME.registerComponent('smooth-move', {
         if (!this.rig || !this.head) return;
         const secs = dt / 1000;
 
-        let x = Math.abs(this.axis.x) < this.data.deadzone ? 0 : this.axis.x;
-        let y = Math.abs(this.axis.y) < this.data.deadzone ? 0 : this.axis.y;
+        const x = applyDeadzone(this.axis.x, this.data.deadzone);
+        const y = applyDeadzone(this.axis.y, this.data.deadzone);
         if (!x && !y) return;
 
         if (this.data.headBased) {
@@ -61,30 +63,31 @@ AFRAME.registerComponent('smooth-move', {
 
         this.rig.object3D.position.add(this.tmp);
 
-        this.el.emit('smoothmovestep', { dx: this.tmp.x, dy: this.tmp.y, dz: this.tmp.z });
+        emitXrEvent(this.el, 'locomotion-step', {
+            dx: this.tmp.x,
+            dy: this.tmp.y,
+            dz: this.tmp.z,
+            mode: 'smooth-move'
+        }, 'smoothmovestep');
     },
 
     _onThumb: function (e) {
-        // e.detail.{x,y} in [-1,1]
-        this.axis.x = e.detail.x || 0;
-        this.axis.y = e.detail.y || 0;
+        const axis = coerceAxisEvent(e.detail);
+        this.axis.x = axis.x;
+        this.axis.y = axis.y;
     },
 
     _onAxisMove: function (e) {
-        // fallback for generic axismove: e.detail.axis = [x,y,...]
-        const a = e.detail && (e.detail.axis || e.detail.axes || []);
-        if (a.length >= 2) { this.axis.x = a[0]; this.axis.y = a[1]; }
+        const axis = coerceAxisEvent(e.detail);
+        this.axis.x = axis.x;
+        this.axis.y = axis.y;
     },
 
     _resolveRig: function () {
-        if (this.data.cameraRig) { this.rig = this.data.cameraRig; return; }
-        const scene = this.el.sceneEl;
-        const cam = scene && (scene.querySelector('[camera]') || scene.querySelector('a-camera'));
-        this.rig = cam ? cam.parentEl : null;
+        this.rig = resolveRig(this.el, this.data.cameraRig || null);
     },
 
     _resolveHead: function () {
-        const scene = this.el.sceneEl;
-        this.head = scene && (scene.querySelector('[camera]') || scene.querySelector('a-camera')) || null;
+        this.head = resolveCamera(this.el.sceneEl);
     }
 });

@@ -29,6 +29,7 @@ AFRAME.registerComponent('vignette', {
     tick: function () { this._updateQuad(); },
 
     remove: function () {
+        this.el.removeEventListener('componentchanged', this._updateQuad);
         if (!this.mesh) return;
         this.el.object3D.remove(this.mesh);
         this.geo.dispose(); this.mat.dispose();

@@ -2,90 +2,2153 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link Start</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebXR SDK — Section A Tests</title>
 
-    <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
-
-    <!-- aframe-extras (movement-controls, checkpoint-controls, gamepad-controls, keyboard-controls, touch-controls, trackpad-controls, animation-mixer, collada-model-legacy) -->
-    <!-- (fbx-model, object-model, nav-mesh, nav-agent, checkpoint, cube-env-map, grab, normal-material, sphere-collider, ocean) -->
-    <!-- https://github.com/c-frame/aframe-extras/tree/master -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.6.0/dist/aframe-extras.min.js"></script> -->
-
-    <!-- aframe-template-component (template) -->
-    <!-- https://github.com/supermedium/superframe/tree/master/components/template/ -->
-    <!-- <script src="https://unpkg.com/aframe-template-component@3.2.1/dist/aframe-template-component.min.js"></script> -->
-
-    <!-- aframe-environment (environment) -->
-    <!-- https://github.com/supermedium/aframe-environment-component -->
-    <script
-        src="https://unpkg.com/aframe-environment-component@1.5.x/dist/aframe-environment-component.min.js"></script>
-
-    <!-- aframe-mountain-component (mountain) -->
-    <!-- https://github.com/supermedium/superframe/tree/master/components/mountain/ -->
-    <!-- <script src="https://unpkg.com/aframe-mountain-component@^0.3.3/aframe-mountain-component.min.js"></script> -->
-
-    <!-- aframe-locomotion (smooth-locomotion, snap-turn) -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/aframe-locomotion@0.2.0/dist/aframe-locomotion.umd.min.js"></script> -->
-
-    <!-- super-hands -->
-    <!-- https://github.com/c-frame/aframe-super-hands-component -->
-    <!-- <script src="https://unpkg.com/super-hands@^3.0.5/dist/super-hands.min.js"></script> -->
-
-    <!-- aframe-text-geometry-component (text-geometry) -->
-    <!-- https://github.com/supermedium/superframe/tree/master/components/text-geometry/ -->
-    <!-- <script src="https://unpkg.com/aframe-text-geometry-component@0.5.1/dist/aframe-text-geometry-component.min.js"></script> -->
-
-    <!-- aframe-layout-component (layout) -->
-    <!-- https://github.com/supermedium/superframe/tree/master/components/layout/ -->
-    <!-- <script src="https://unpkg.com/aframe-layout-component@5.3.0/dist/aframe-layout-component.min.js"></script> -->
-
-    <!-- instanced-mesh (instanced-mesh-member, instanced-mesh) -->
-    <!-- https://github.com/diarmidmackenzie/instanced-mesh -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/diarmidmackenzie/instanced-mesh@v0.7.4/src/instanced-mesh.min.js"></script> -->
-
-    <!-- aframe-geometry-merger-component (geometry-merger) -->
-    <!-- https://github.com/supermedium/superframe/tree/master/components/geometry-merger/ -->
-    <!-- <script src="https://unpkg.com/aframe-geometry-merger-component/dist/aframe-geometry-merger-component.min.js"></script> -->
-
-    <!-- aframe-particle-system-component (particle-system) -->
-    <!-- https://github.com/IdeaSpaceVR/aframe-particle-system-component -->
-    <!-- <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script> -->
-
-    <!-- a-frame-component-postprocessing (post-processing) -->
-    <!-- https://github.com/akbartus/A-Frame-Component-Postprocessing -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/akbartus/A-Frame-Component-Postprocessing/dist/post-processing.min.js"></script> -->
-
-    <!-- aframe-log-component (log) -->
-    <!-- https://github.com/supermedium/superframe/tree/master/components/log/ -->
-    <!-- <script src="https://unpkg.com/aframe-log-component/dist/aframe-log-component.min.js"></script> -->
-
-    <!-- aframe-camera-recorder-component (camera-recorder) -->
-    <!-- https://github.com/supermedium/superframe/tree/master/components/camera-recorder/ -->
-    <!-- <script src="https://unpkg.com/aframe-camera-recorder-component@1.5.0/dist/aframe-camera-recorder-component.min.js"></script> -->
-
-    <!-- aframe-gaussian0-splatting (gaussian_splatting) -->
-    <!-- https://github.com/quadjr/aframe-gaussian-splatting  -->
-    <script src="https://quadjr.github.io/aframe-gaussian-splatting/index.js"></script>
-
-    <script src="/components/index.js" type="module"></script>
+  <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+  <script src="https://unpkg.com/aframe-environment-component@1.5.x/dist/aframe-environment-component.min.js"></script>
+  <script src="/components/index.js" type="module"></script>
 </head>
 
 <body>
-    <a-scene xr-mode-ui="XRMode:ar;" environment="preset:default"
-        webxr="requiredFeatures: local-floor; optionalFeatures: bounded-floor">
-        <a-assets></a-assets>
+  <a-scene
+    light="defaultLightsEnabled: false"
+    shadow="type: pcfsoft"
+    gravity
+    xr-mode-ui="XRMode: vr"
+    webxr="requiredFeatures: local-floor; optionalFeatures: bounded-floor">
 
-        <a-entity id="rig" origin>
-            <a-camera wasd-plus look-controls></a-camera>
-            <a-entity oculus-touch-controls="hand:left;"
-                fly="ascendEvent:gripchanged; accelerateEvent: triggerchanged"></a-entity>
-            <a-entity oculus-touch-controls="hand:right;" snap-turn></a-entity>
-        </a-entity>
+    <a-assets>
+      <audio id="audio-click-sfx" src="https://cdn.aframe.io/basic-guide/audio/backgroundnoise.wav" preload="auto" crossorigin="anonymous"></audio>
+      <audio id="audio-loop-sfx" src="https://cdn.aframe.io/basic-guide/audio/backgroundnoise.wav" preload="auto" crossorigin="anonymous"></audio>
+    </a-assets>
 
-        <a-entity gaussian_splatting="src: https://huggingface.co/cakewalk/splat-data/resolve/main/gs_FF3_lumix_4k%203.ply"></a-entity>
-    </a-scene>
+    <!-- Starry sky (no ground or dressing) -->
+    <a-entity environment="preset: starry; ground: none; dressingAmount: 0"></a-entity>
+
+    <!-- Lighting -->
+    <a-entity light="type: ambient; color: #c8d4e0; intensity: 0.35"></a-entity>
+    <a-entity light="type: directional; color: #fff5e0; intensity: 0.7; castShadow: true; shadowMapWidth: 2048; shadowMapHeight: 2048; shadowCameraLeft: -70; shadowCameraRight: 70; shadowCameraTop: 110; shadowCameraBottom: -110" position="20 30 20"></a-entity>
+    <!-- Ceiling strip lights spaced every 28 units down the room length -->
+    <a-entity light="type: point; color: #f0f4ff; intensity: 1.4; distance: 35; decay: 2" position="-28 18 14"></a-entity>
+    <a-entity light="type: point; color: #f0f4ff; intensity: 1.4; distance: 35; decay: 2" position=" 28 18 14"></a-entity>
+    <a-entity light="type: point; color: #f0f4ff; intensity: 1.4; distance: 35; decay: 2" position="-28 18 42"></a-entity>
+    <a-entity light="type: point; color: #f0f4ff; intensity: 1.4; distance: 35; decay: 2" position=" 28 18 42"></a-entity>
+    <a-entity light="type: point; color: #f0f4ff; intensity: 1.4; distance: 35; decay: 2" position="-28 18 70"></a-entity>
+    <a-entity light="type: point; color: #f0f4ff; intensity: 1.4; distance: 35; decay: 2" position=" 28 18 70"></a-entity>
+    <a-entity light="type: point; color: #f0f4ff; intensity: 1.4; distance: 35; decay: 2" position="-28 18 98"></a-entity>
+    <a-entity light="type: point; color: #f0f4ff; intensity: 1.4; distance: 35; decay: 2" position=" 28 18 98"></a-entity>
+
+    <!-- Player rig -->
+    <a-entity id="rig" origin position="0 0 0">
+      <a-camera id="camera" wasd-plus look-controls position="0 1.6 0">
+        <a-cursor></a-cursor>
+      </a-camera>
+      <a-entity id="leftHand"
+        oculus-touch-controls="hand: left"
+        haptics
+        fly="flySpeed: 3; turnSpeed: 0.5"
+        cursor="rayOrigin: entity; fuse: false"
+        raycaster="objects: .clickable, [interactable], [grabbable], [climbable]; far: 12; showLine: true"
+        line="color: #88ddff"
+        climb-movement="cameraRig: #rig; startEvent: gripdown; endEvent: gripup; selector: [climbable]"
+        grab-interactor="startEvent: gripdown; endEvent: gripup"
+      ></a-entity>
+      <a-entity id="rightHand"
+        oculus-touch-controls="hand: right"
+        haptics
+        smooth-turn="speedDeg: 90"
+        cursor="rayOrigin: entity; fuse: false"
+        raycaster="objects: .clickable, [interactable], [grabbable], [climbable]; far: 12; showLine: true"
+        line="color: #ffcc88"
+        climb-movement="cameraRig: #rig; startEvent: gripdown; endEvent: gripup; selector: [climbable]"
+        grab-interactor="startEvent: gripdown; endEvent: gripup"
+      ></a-entity>
+    </a-entity>
+
+    <!-- Testing room: floor + ceiling + windowed walls -->
+    <a-plane rotation="-90 0 0" width="120" height="200" position="0 0 0" material="color: #d8dde3; roughness: 0.95"></a-plane>
+    <a-plane rotation="90 0 0" width="120" height="200" position="0 20 0" material="color: #f0f2f4; roughness: 0.9; side: double"></a-plane>
+
+    <!-- Front wall (z=-100): lower + glass window + upper -->
+    <a-plane width="120" height="5" position="0 2.5 -100" material="color: #dde0e4; roughness: 0.9; side: double"></a-plane>
+    <a-plane width="120" height="10" position="0 10  -100" material="color: #6699bb; opacity: 0.18; transparent: true; side: double"></a-plane>
+    <a-plane width="120" height="5" position="0 17.5 -100" material="color: #dde0e4; roughness: 0.9; side: double"></a-plane>
+
+    <!-- Back wall (z=100) -->
+    <a-plane rotation="0 180 0" width="120" height="5" position="0 2.5 100" material="color: #dde0e4; roughness: 0.9; side: double"></a-plane>
+    <a-plane rotation="0 180 0" width="120" height="10" position="0 10  100" material="color: #6699bb; opacity: 0.18; transparent: true; side: double"></a-plane>
+    <a-plane rotation="0 180 0" width="120" height="5" position="0 17.5 100" material="color: #dde0e4; roughness: 0.9; side: double"></a-plane>
+
+    <!-- Left wall (x=-60) -->
+    <a-plane rotation="0 90 0" width="200" height="5" position="-60 2.5 0" material="color: #dde0e4; roughness: 0.9; side: double"></a-plane>
+    <a-plane rotation="0 90 0" width="200" height="10" position="-60 10  0" material="color: #6699bb; opacity: 0.18; transparent: true; side: double"></a-plane>
+    <a-plane rotation="0 90 0" width="200" height="5" position="-60 17.5 0" material="color: #dde0e4; roughness: 0.9; side: double"></a-plane>
+
+    <!-- Right wall (x=60) -->
+    <a-plane rotation="0 -90 0" width="200" height="5" position="60 2.5 0" material="color: #dde0e4; roughness: 0.9; side: double"></a-plane>
+    <a-plane rotation="0 -90 0" width="200" height="10" position="60 10  0" material="color: #6699bb; opacity: 0.18; transparent: true; side: double"></a-plane>
+    <a-plane rotation="0 -90 0" width="200" height="5" position="60 17.5 0" material="color: #dde0e4; roughness: 0.9; side: double"></a-plane>
+
+    <a-entity id="sections-root" position="0 0 -100" scale="0.5 0.5 0.5">
+
+    <!-- Section header -->
+    <a-text value="— SECTION A —" position="0 5.5 14" align="center" color="#aaffaa" width="10"></a-text>
+
+    <!-- ══════════════════════════════════════
+         1. ability + resource  (X = -21)
+    ══════════════════════════════════════ -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="-21 0.5 14" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="ability / resource" position="-21 4.5 14" align="center" color="#88aaff" width="6"></a-text>
+    <a-text value="Resource recharges at 10/s. Click the orb to spend 20 energy." position="-21 3.8 14" align="center" color="#888" width="5"></a-text>
+
+    <!-- resource pool -->
+    <a-text value="resource  (energy 100, regen 10/s)" position="-24 3 14" align="center" color="#ccc" width="3.5"></a-text>
+    <a-entity
+      id="ability-resource"
+      position="-24 1.5 14"
+      geometry="primitive: box; width: 1; height: 1; depth: 1"
+      material="color: #4488ff"
+      resource="name: energy; max: 100; current: 100; rechargeRate: 10; rechargeDelayMs: 1000"
+      animation__gain="property: material.color; to: #88ffff; startEvents: xr:resource-changed; dur: 300"
+    ></a-entity>
+
+    <!-- ability orb: click fires ability, flashes white on success, red when blocked -->
+    <a-text value="ability  (cost 20, cooldown 2s) — click" position="-18 3 14" align="center" color="#ccc" width="3.5"></a-text>
+    <a-entity
+      id="ability-orb"
+      position="-18 1.5 14"
+      geometry="primitive: sphere; radius: 0.6"
+      material="color: #dd88ff"
+      ability="useEvent: click; cooldownMs: 2000; cost: 20; resourceSource: #ability-resource"
+      animation__activate="property: material.color; to: #ffffff; startEvents: xr:ability-activate; dur: 200"
+      animation__blocked="property: material.color; to: #ff2222; startEvents: xr:ability-blocked; dur: 200"
+    ></a-entity>
+
+
+    <!-- ══════════════════════════════════════
+         2. ai-agent  (X = -7)
+    ══════════════════════════════════════ -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="-7 0.5 14" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="ai-agent" position="-7 4.5 14" align="center" color="#ff8888" width="6"></a-text>
+    <a-text value="Agent patrols A→B inside the pad. Chases you within 6 m." position="-7 3.8 14" align="center" color="#888" width="5"></a-text>
+
+    <!-- patrol markers -->
+    <a-sphere position="-9.5 0.65 16" radius="0.25" color="#ffaa00" opacity="0.8"></a-sphere>
+    <a-text value="Patrol A" position="-9.5 1.2 16" align="center" color="#ffaa00" width="2.5"></a-text>
+    <a-sphere position="-4.5 0.65 12" radius="0.25" color="#ffaa00" opacity="0.8"></a-sphere>
+    <a-text value="Patrol B" position="-4.5 1.2 12" align="center" color="#ffaa00" width="2.5"></a-text>
+
+    <!-- agent -->
+    <a-entity
+      id="ai-agent-1"
+      position="-7 1.1 14"
+      geometry="primitive: box; width: 0.7; height: 1.2; depth: 0.7"
+      material="color: #ff4444"
+      ai-agent="target: #rig; patrolPoints: -9.5 1.1 16|-4.5 1.1 12; speed: 1.5; sightRange: 6; attackRange: 1.5; damage: 1"
+      animation__chase="property: material.color; to: #ff8800; startEvents: xr:ai-state-changed; dur: 200"
+    ></a-entity>
+
+    <!-- sight range indicator -->
+    <a-entity
+      position="-7 0.55 14"
+      geometry="primitive: circle; radius: 6; segments: 32"
+      rotation="-90 0 0"
+      material="color: #ff4444; wireframe: true; opacity: 0.3"
+    ></a-entity>
+
+
+    <!-- ══════════════════════════════════════
+         3. area  (X = 7)
+    ══════════════════════════════════════ -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="7 0.5 14" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="area" position="7 4.5 14" align="center" color="#88ff88" width="6"></a-text>
+    <a-text value="Walk inside each zone to trigger enter/exit events" position="7 3.8 14" align="center" color="#888" width="5"></a-text>
+    <a-text id="area-status" value="area: waiting" position="7 2.9 14" align="center" color="#ddeeff" width="4"></a-text>
+
+    <!-- box area: turns green on enter, red on exit -->
+    <a-text value="box area  (enter=green)" position="4 3 14" align="center" color="#ccc" width="3.5"></a-text>
+    <a-entity
+      position="4 1.5 14"
+      geometry="primitive: box; width: 2.5; height: 2; depth: 2.5"
+      material="color: #ee4444; wireframe: true"
+      area="target: #camera; shape: box; size: 2.5 2 2.5"
+      animation__enter="property: material.color; to: #44ee44; startEvents: xr:area-enter; dur: 100"
+      animation__exit="property: material.color; to: #ee4444; startEvents: xr:area-exit; dur: 100"
+    ></a-entity>
+
+    <!-- sphere area: turns yellow on enter, blue on exit -->
+    <a-text value="sphere area  (enter=yellow)" position="10 3 14" align="center" color="#ccc" width="3.5"></a-text>
+    <a-entity
+      position="10 1.5 14"
+      geometry="primitive: sphere; radius: 1.2"
+      material="color: #4444ee; wireframe: true"
+      area="target: #camera; shape: sphere; radius: 1.2"
+      animation__enter="property: material.color; to: #eeee44; startEvents: xr:area-enter; dur: 100"
+      animation__exit="property: material.color; to: #4444ee; startEvents: xr:area-exit; dur: 100"
+    ></a-entity>
+
+
+    <!-- ══════════════════════════════════════
+         4. audio-event  (X = 21)
+    ══════════════════════════════════════ -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="21 0.5 14" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="audio-event" position="21 4.5 14" align="center" color="#88ffff" width="6"></a-text>
+    <a-text value="Click the box to trigger playback. Includes default sound." position="21 3.8 14" align="center" color="#888" width="5"></a-text>
+
+    <!-- click-to-play -->
+    <a-text value="click-to-play  (event: click)" position="18.5 3 14" align="center" color="#ccc" width="3.5"></a-text>
+    <a-entity
+      id="audio-click"
+      class="clickable"
+      position="18.5 1.5 14"
+      geometry="primitive: box; width: 1; height: 1; depth: 1"
+      material="color: #44eeee"
+      audio-event="event: click; autoplay: false; positional: true; src: #audio-click-sfx; volume: 0.35"
+      animation__play="property: material.color; to: #ffffff; startEvents: xr:audio-play; dur: 200"
+      animation__stop="property: material.color; to: #44eeee; startEvents: xr:audio-stop; dur: 200"
+    ></a-entity>
+
+    <!-- positional loop + autoplay -->
+    <a-text value="positional loop  (autoplay: true)" position="23.5 3 14" align="center" color="#ccc" width="3.5"></a-text>
+    <a-entity
+      id="audio-loop"
+      position="23.5 1.5 14"
+      geometry="primitive: sphere; radius: 0.6"
+      material="color: #ee8844"
+      audio-event="autoplay: true; loop: true; positional: true; src: #audio-loop-sfx; volume: 0.12"
+      animation__play="property: material.color; to: #ffffff; startEvents: xr:audio-play; dur: 200"
+    ></a-entity>
+
+
+    <!-- ══════════════════════════════════════
+         — SECTION B —  (Z = -28)
+    ══════════════════════════════════════ -->
+    <a-text value="— SECTION B —" position="0 5.5 28" align="center" color="#ffffaa" width="10"></a-text>
+
+    <!-- ══════════════════════════════════════
+         1. basic-geometry  (X = -14)
+    ══════════════════════════════════════ -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="-14 0.5 28" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="basic-geometry" position="-14 4.5 28" align="center" color="#ffaa88" width="6"></a-text>
+    <a-text value="Quick primitives with custom colors and materials" position="-14 3.8 28" align="center" color="#888" width="5"></a-text>
+
+    <!-- sphere -->
+    <a-text value="sphere" position="-17 3 28" align="center" color="#ccc" width="2"></a-text>
+    <a-entity
+      position="-17 1.5 28"
+      basic-geometry="primitive: sphere; radius: 0.8; color: #ff6b6b; roughness: 0.3; metalness: 0.8"
+    ></a-entity>
+
+    <!-- cylinder -->
+    <a-text value="cylinder" position="-14 3 28" align="center" color="#ccc" width="2"></a-text>
+    <a-entity
+      position="-14 1.5 28"
+      basic-geometry="primitive: cylinder; radius: 0.6; height: 1.5; color: #4ecdc4; roughness: 0.9; metalness: 0.1"
+    ></a-entity>
+
+    <!-- cone -->
+    <a-text value="cone" position="-11 3 28" align="center" color="#ccc" width="2"></a-text>
+    <a-entity
+      position="-11 1.5 28"
+      basic-geometry="primitive: cone; radiusBottom: 0.8; radiusTop: 0.2; height: 1.2; color: #45b7d1; roughness: 0.5; metalness: 0.5"
+    ></a-entity>
+
+
+    <!-- ══════════════════════════════════════
+         2. bullet  (X = 0)
+    ══════════════════════════════════════ -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="0 0.5 28" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="bullet" position="0 4.5 28" align="center" color="#ff8888" width="6"></a-text>
+    <a-text value="Click launcher to shoot pooled bullets into targets" position="0 3.8 28" align="center" color="#888" width="5"></a-text>
+    <a-text id="bullet-status" value="bullet: ready" position="0 2.6 28" align="center" color="#ddeeff" width="4"></a-text>
+
+    <!-- shooter -->
+    <a-text value="shooter — click" position="-3 3 28" align="center" color="#ccc" width="2.5"></a-text>
+    <a-entity
+      id="bullet-shooter"
+      class="clickable"
+      position="-3 1.5 28"
+      geometry="primitive: box; width: 0.8; height: 0.8; depth: 0.8"
+      material="color: #ff4444"
+      bullet="name: redBullet; poolSize: 5; speed: 10; maxTime: 3; damagePoints: 10"
+      shooter="activeBulletType: redBullet; bulletTypes: redBullet"
+      animation__shoot="property: material.color; to: #ffffff; startEvents: xr:shoot-fired; dur: 100"
+    ></a-entity>
+
+    <!-- targets -->
+    <a-text value="targets" position="3 3 28" align="center" color="#ccc" width="2"></a-text>
+    <a-entity
+      id="bullet-target-box"
+      position="1 1.5 28"
+      geometry="primitive: box; width: 0.6; height: 1; depth: 0.6"
+      material="color: #44ff44"
+      target="healthPoints: 50"
+      animation__hit="property: material.color; to: #ff4444; startEvents: xr:target-hit; dur: 200"
+    ></a-entity>
+    <a-entity
+      id="bullet-target-sphere"
+      position="3 1.5 28"
+      geometry="primitive: sphere; radius: 0.5"
+      material="color: #4444ff"
+      target="healthPoints: 30"
+      animation__hit="property: material.color; to: #ff4444; startEvents: xr:target-hit; dur: 200"
+    ></a-entity>
+    <a-entity
+      id="bullet-target-cylinder"
+      position="5 1.5 28"
+      geometry="primitive: cylinder; radius: 0.4; height: 1"
+      material="color: #ffaa44"
+      target="healthPoints: 40"
+      animation__hit="property: material.color; to: #ff4444; startEvents: xr:target-hit; dur: 200"
+    ></a-entity>
+
+
+    <!-- ══════════════════════════════════════
+         — SECTION C —  (Z = -42)
+    ══════════════════════════════════════ -->
+    <a-text value="— SECTION C —" position="0 5.5 42" align="center" color="#aa88ff" width="10"></a-text>
+
+    <!-- 1. checkpoint (X = -21) -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="-21 0.5 42" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="checkpoint" position="-21 4.5 42" align="center" color="#ffdd88" width="6"></a-text>
+    <a-text value="Click star to set checkpoint. Click cube to teleport back." position="-21 3.8 42" align="center" color="#888" width="5"></a-text>
+    <a-text value="set — click" position="-24 3 42" align="center" color="#ccc" width="2.5"></a-text>
+    <a-entity
+      id="checkpoint-star"
+      class="clickable"
+      position="-24 1.5 42"
+      geometry="primitive: sphere; radius: 0.5"
+      material="color: #ffff44"
+      checkpoint="key: test; event: click; autoActivate: true"
+      animation__activate="property: material.color; to: #ffffff; startEvents: xr:checkpoint-activated; dur: 200"
+    ></a-entity>
+    <a-text value="teleport — click" position="-18 3 42" align="center" color="#ccc" width="2.5"></a-text>
+    <a-entity
+      id="checkpoint-tp"
+      class="clickable"
+      position="-18 1.5 42"
+      geometry="primitive: box; width: 0.8; height: 0.8; depth: 0.8"
+      material="color: #44ffff"
+      animation__click="property: material.color; to: #ffffff; startEvents: click; dur: 200"
+    ></a-entity>
+
+    <!-- 2. climbable (X = -7) -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="-7 0.5 42" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="climbable" position="-7 4.5 42" align="center" color="#88ffaa" width="6"></a-text>
+    <a-text value="Grip the wall to climb it" position="-7 3.8 42" align="center" color="#888" width="5"></a-text>
+    <a-entity
+      position="-7 3 43"
+      geometry="primitive: box; width: 4; height: 5; depth: 0.4"
+      material="color: #8b4513"
+      climbable
+    ></a-entity>
+    <!-- rungs -->
+    <a-entity position="-8.5 1.2 43" geometry="primitive: cylinder; radius: 0.1; height: 3" rotation="0 0 90" material="color: #5d2f0a" climbable></a-entity>
+    <a-entity position="-8.5 2.2 43" geometry="primitive: cylinder; radius: 0.1; height: 3" rotation="0 0 90" material="color: #5d2f0a" climbable></a-entity>
+    <a-entity position="-8.5 3.2 43" geometry="primitive: cylinder; radius: 0.1; height: 3" rotation="0 0 90" material="color: #5d2f0a" climbable></a-entity>
+
+    <!-- 3. collision (X = 7) -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="7 0.5 42" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="collision" position="7 4.5 42" align="center" color="#aaffaa" width="6"></a-text>
+    <a-text value="Blue box detects collisions with [collision-body] entities" position="7 3.8 42" align="center" color="#888" width="5"></a-text>
+    <a-entity
+      id="collision-detector"
+      position="4 1.5 42"
+      geometry="primitive: box; width: 1; height: 1; depth: 1"
+      material="color: #4444ff"
+      collision="selector: [collision-body]"
+      animation__enter="property: material.color; to: #ff4444; startEvents: xr:collision-enter; dur: 150"
+      animation__exit="property: material.color; to: #4444ff; startEvents: xr:collision-exit; dur: 150"
+    ></a-entity>
+    <a-text value="body 1" position="7 3 42" align="center" color="#ccc" width="2"></a-text>
+    <a-entity id="collision-cube" position="7 1.5 42" geometry="primitive: box; width: 0.8; height: 0.8; depth: 0.8" material="color: #44ff44" collision-body
+      animation__slide="property: position; to: 4.1 1.5 42; dir: alternate; loop: true; dur: 1300; easing: easeInOutSine"></a-entity>
+    <a-text value="body 2" position="10 3 42" align="center" color="#ccc" width="2"></a-text>
+    <a-entity position="10 1.5 42" geometry="primitive: sphere; radius: 0.5" material="color: #ffaa44" collision-body></a-entity>
+
+    <!-- 4. confetti (X = 21) -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="21 0.5 42" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="confetti" position="21 4.5 42" align="center" color="#ff88ff" width="6"></a-text>
+    <a-text value="Click the box to trigger a confetti burst" position="21 3.8 42" align="center" color="#888" width="5"></a-text>
+    <a-entity
+      class="clickable"
+      position="21 1.2 42"
+      geometry="primitive: box; width: 1.2; height: 1.2; depth: 1.2"
+      material="color: #ff88cc"
+      confetti="wavesNumber: 4; waveSize: 25; areaWidth: 3; areaHeight: 3; sourceHeight: 1.2; waveSeparation: 3"
+      animation__click="property: material.color; to: #ffffff; startEvents: click; dur: 150"
+    ></a-entity>
+
+    <!-- 5. cooldown (X = 35) -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="35 0.5 42" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="cooldown" position="35 4.5 42" align="center" color="#88ffcc" width="6"></a-text>
+    <a-text value="Click orb — blocks for 3s then resets green" position="35 3.8 42" align="center" color="#888" width="5"></a-text>
+    <a-entity
+      id="cooldown-orb"
+      class="clickable"
+      position="35 1.5 42"
+      geometry="primitive: sphere; radius: 0.7"
+      material="color: #44ff88"
+      cooldown="duration: 3000; triggerEvent: click"
+      animation__start="property: material.color; to: #ff4444; startEvents: xr:cooldown-start; dur: 100"
+      animation__ready="property: material.color; to: #44ff88; startEvents: xr:cooldown-ready; dur: 100"
+    ></a-entity>
+
+    <!-- 6. csg-primitive (X = 49) -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="49 0.5 42" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="csg-primitive" position="49 4.5 42" align="center" color="#ffaa88" width="6"></a-text>
+    <a-text value="Add / Subtract / Intersect examples" position="49 3.8 42" align="center" color="#888" width="5"></a-text>
+
+    <a-text value="ADD" position="45.8 3 42" align="center" color="#ffb380" width="1.6"></a-text>
+    <a-entity position="45.8 1.35 42">
+      <a-entity csg-primitive="shape: box; op: add; size: 1.1 1.1 1.1" material="color: #ff8f5a; opacity: 0.85; transparent: true"></a-entity>
+      <a-entity position="0.35 0.2 0" csg-primitive="shape: sphere; op: add; radius: 0.55" material="color: #ffd166; opacity: 0.82; transparent: true"></a-entity>
+    </a-entity>
+
+    <a-text value="SUBTRACT" position="49 3 42" align="center" color="#92ffc4" width="2"></a-text>
+    <a-entity position="49 1.35 42">
+      <a-entity csg-primitive="shape: box; op: add; size: 1.15 1.15 1.15" material="color: #63e6be; opacity: 0.7; transparent: true"></a-entity>
+      <a-entity position="0.18 0 0" csg-primitive="shape: sphere; op: subtract; radius: 0.5" material="color: #ffffff; wireframe: true"></a-entity>
+    </a-entity>
+
+    <a-text value="INTERSECT" position="52.2 3 42" align="center" color="#9fc4ff" width="2"></a-text>
+    <a-entity position="52.2 1.35 42">
+      <a-entity csg-primitive="shape: sphere; op: add; radius: 0.62" material="color: #74c0fc; opacity: 0.72; transparent: true"></a-entity>
+      <a-entity rotation="90 0 0" csg-primitive="shape: cylinder; op: intersect; radius: 0.36; height: 1.4" material="color: #ffffff; wireframe: true"></a-entity>
+    </a-entity>
+
+    <a-text value="metadata preview: op tags for CSG pipelines" position="49 2.4 39.6" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- ══════════════════════════════════════
+         — SECTION D —  (Z = -56)
+    ══════════════════════════════════════ -->
+    <a-text value="— SECTION D —" position="0 5.5 56" align="center" color="#ff88aa" width="10"></a-text>
+
+    <!-- 1. damage (X = -14) -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="-14 0.5 56" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="damage" position="-14 4.5 56" align="center" color="#ff6666" width="6"></a-text>
+    <a-text value="Click source to send damage. Receiver flashes and logs." position="-14 3.8 56" align="center" color="#888" width="5"></a-text>
+
+    <a-text value="damage-source — click" position="-17 3 56" align="center" color="#ccc" width="3"></a-text>
+    <a-entity
+      id="dmg-source"
+      position="-17 1.5 56"
+      geometry="primitive: box; width: 1; height: 1; depth: 1"
+      material="color: #ff4444"
+      damage-source="amount: 10; event: click; target: #dmg-receiver; reason: punch"
+      animation__click="property: material.color; to: #ffffff; startEvents: click; dur: 150"
+    ></a-entity>
+
+    <a-text value="damage-receiver" position="-11 3 56" align="center" color="#ccc" width="3"></a-text>
+    <a-entity
+      id="dmg-receiver"
+      position="-11 1.5 56"
+      geometry="primitive: sphere; radius: 0.7"
+      material="color: #44aaff"
+      damage-receiver="multiplier: 1; forwardToHealth: false"
+      animation__hit="property: material.color; to: #ff0000; startEvents: xr:damage-received; dur: 200"
+      animation__recover="property: material.color; to: #44aaff; startEvents: xr:damage-received; delay: 300; dur: 400"
+    ></a-entity>
+
+    <!-- 2. decal (X = 0) -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="0 0.5 56" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="decal" position="0 4.5 56" align="center" color="#88ddff" width="6"></a-text>
+    <a-text value="Click the wall to paint a decal on it" position="0 3.8 56" align="center" color="#888" width="5"></a-text>
+
+    <a-entity
+      id="decal-wall"
+      class="clickable"
+      interactable
+      position="0 1.5 59"
+      geometry="primitive: box; width: 6; height: 4; depth: 0.3"
+      material="color: #dddddd"
+    ></a-entity>
+    <a-text value="decal wall — click" position="0 3 56" align="center" color="#ccc" width="3"></a-text>
+
+    <!-- ══════════════════════════════════════
+         — SECTION F —  (Z = -70)
+    ══════════════════════════════════════ -->
+    <a-text value="— SECTION F —" position="0 5.5 70" align="center" color="#aaffff" width="10"></a-text>
+
+    <!-- 1. faction (X = -21) -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="-21 0.5 70" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="faction" position="-21 4.5 70" align="center" color="#ffcc44" width="6"></a-text>
+    <a-text value="Red=hostile. Blue=friendly. Click red box: damages red, blocked on blue." position="-21 3.8 70" align="center" color="#888" width="5"></a-text>
+
+    <a-text value="attacker (team: red)" position="-24 3 70" align="center" color="#ff8888" width="3"></a-text>
+    <a-entity
+      id="faction-attacker"
+      position="-24 1.5 70"
+      geometry="primitive: box; width: 0.9; height: 0.9; depth: 0.9"
+      material="color: #ff4444"
+      faction="team: red; hostileTo: blue"
+      damage-source="amount: 10; event: click; target: #faction-target-red; reason: attack"
+      animation__click="property: material.color; to: #ffffff; startEvents: click; dur: 150"
+    ></a-entity>
+
+    <a-text value="target (team: red = friendly fire)" position="-18 3 70" align="center" color="#ffaa44" width="3"></a-text>
+    <a-entity
+      id="faction-target-red"
+      position="-21 1.5 70"
+      geometry="primitive: sphere; radius: 0.6"
+      material="color: #ff8800"
+      faction="team: red"
+      damage-receiver
+      faction-damage-gate
+      animation__blocked="property: material.color; to: #ffffff; startEvents: xr:friendly-fire-blocked; dur: 200"
+    ></a-entity>
+
+    <a-text value="target (team: blue = hostile)" position="-15 3 70" align="center" color="#88aaff" width="3"></a-text>
+    <a-entity
+      id="faction-target-blue"
+      position="-18 1.5 70"
+      geometry="primitive: sphere; radius: 0.6"
+      material="color: #4488ff"
+      faction="team: blue"
+      damage-receiver
+      faction-damage-gate
+      animation__hit="property: material.color; to: #ff0000; startEvents: xr:damage-received; dur: 200"
+      animation__recover="property: material.color; to: #4488ff; startEvents: xr:damage-received; delay: 400; dur: 300"
+    ></a-entity>
+
+    <!-- 2. fly (X = -7) -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="-7 0.5 70" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="fly" position="-7 4.5 70" align="center" color="#88ffff" width="6"></a-text>
+    <a-text value="Left stick: move. Trigger: boost. Grip: ascend. (VR only)" position="-7 3.8 70" align="center" color="#888" width="5"></a-text>
+
+    <a-text value="fly controller demo" position="-7 3 70" align="center" color="#ccc" width="4"></a-text>
+    <a-entity position="-7 2 70" geometry="primitive: sphere; radius: 0.4" material="color: #44ffff"></a-entity>
+    <a-entity position="-10 1 72" geometry="primitive: box; width: 1; height: 0.2; depth: 1" material="color: #ffaa44"></a-entity>
+    <a-entity position="-7 3 72" geometry="primitive: box; width: 1; height: 0.2; depth: 1" material="color: #ffaa44"></a-entity>
+    <a-entity position="-4 5 72" geometry="primitive: box; width: 1; height: 0.2; depth: 1" material="color: #ffaa44"></a-entity>
+    <a-text value="platforms to fly between" position="-7 1.5 72" align="center" color="#888" width="3"></a-text>
+
+    <!-- 3. fog-volume (X = 7) -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="7 0.5 70" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="fog-volume" position="7 4.5 70" align="center" color="#aaccff" width="6"></a-text>
+    <a-text value="Walk into the cube to trigger scene fog" position="7 3.8 70" align="center" color="#888" width="5"></a-text>
+
+    <a-text value="fog zone — walk in" position="7 3 70" align="center" color="#ccc" width="3"></a-text>
+    <a-entity
+      position="7 1.5 70"
+      geometry="primitive: box; width: 3; height: 3; depth: 3"
+      material="color: #8899cc; wireframe: true; opacity: 0.6"
+      fog-volume="color: #223355; near: 1; far: 6; size: 3 3 3"
+    ></a-entity>
+
+    <!-- 4. follow (X = 21) -->
+    <a-plane rotation="-90 0 0" width="12" height="12" position="21 0.5 70" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="follow / look-at-target" position="21 4.5 70" align="center" color="#88ff88" width="6"></a-text>
+    <a-text value="Yellow orb follows you. Red arrow always faces you." position="21 3.8 70" align="center" color="#888" width="5"></a-text>
+
+    <a-text value="follow (lerp)" position="18 3 70" align="center" color="#ccc" width="3"></a-text>
+    <a-entity
+      position="21 1.5 70"
+      geometry="primitive: sphere; radius: 0.5"
+      material="color: #ffff44"
+      follow="target: #camera; offset: 2 0 0; speed: 3; snapDistance: 80"
+    ></a-entity>
+
+    <a-text value="look-at-target" position="24 3 70" align="center" color="#ccc" width="3"></a-text>
+    <a-entity
+      position="24 1.5 70"
+      geometry="primitive: cone; radiusBottom: 0.3; radiusTop: 0; height: 0.8"
+      material="color: #ff6644"
+      rotation="90 0 0"
+      look-at-target="target: #camera; lockY: true; forward: -y"
+    ></a-entity>
+
+    <!-- =====================================================
+         — SECTION G —  (Z = -84)
+    ===================================================== -->
+    <a-text value="— SECTION G —" position="0 5.5 84" align="center" color="#ffcc88" width="10"></a-text>
+
+    <!-- G1: geometry-animate -->
+    <a-plane position="-21 0.01 84" rotation="-90 0 0" width="12" height="12"
+      material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="geometry-animate" position="-21 4.5 84" align="center" color="#88ff88" width="6"></a-text>
+    <!-- spin mode -->
+    <a-box position="-24 1.5 84" width="0.8" height="0.8" depth="0.8"
+      material="color: #ff8844"
+      geometry-animate="mode: spin; speed: 1; axis: 0 1 0"></a-box>
+    <a-text value="spin" position="-24 2.6 84" align="center" color="#ccc" width="3"></a-text>
+    <!-- bob mode -->
+    <a-sphere position="-21 1.5 84" radius="0.4"
+      material="color: #44aaff"
+      geometry-animate="mode: bob; speed: 1; amplitude: 0.3"></a-sphere>
+    <a-text value="bob" position="-21 2.6 84" align="center" color="#ccc" width="3"></a-text>
+    <!-- pulse mode -->
+    <a-torus position="-18 1.5 84" radius="0.4" radius-tubular="0.1"
+      material="color: #88ff44"
+      geometry-animate="mode: pulse; speed: 1; amplitude: 0.3"></a-torus>
+    <a-text value="pulse" position="-18 2.6 84" align="center" color="#ccc" width="3"></a-text>
+
+    <!-- G2: grab / grab-point -->
+    <a-plane position="-7 0.01 84" rotation="-90 0 0" width="12" height="12"
+      material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="grab / grab-point" position="-7 4.5 84" align="center" color="#88ff88" width="6"></a-text>
+    <!-- grabbable cube -->
+    <a-box id="grab-cube" position="-9 1.5 84" width="0.7" height="0.7" depth="0.7"
+      material="color: #ffdd44"
+      grabbable></a-box>
+    <a-text value="grabbable box" position="-9 2.5 84" align="center" color="#ccc" width="3.5"></a-text>
+    <!-- grab-point demo: object snaps to the grab-point position on grab -->
+    <a-entity id="grab-point-anchor" position="-5 1.5 84">
+      <a-sphere radius="0.12" material="color: #ff44ff; opacity: 0.6"></a-sphere>
+      <a-entity grab-point="offset: 0 0.3 0; alignRotation: true"></a-entity>
+    </a-entity>
+    <a-box position="-5 1.5 84" width="0.6" height="0.6" depth="0.6"
+      material="color: #ff44ff"
+      grabbable
+      grab-point-target="point: #grab-point-anchor"></a-box>
+    <a-text value="grab-point-target" position="-5 2.5 84" align="center" color="#ccc" width="3.5"></a-text>
+
+    <!-- G3: gravity (rigid-body system) -->
+    <a-plane position="7 0.01 84" rotation="-90 0 0" width="12" height="12"
+      material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="gravity" position="7 4.5 84" align="center" color="#88ff88" width="6"></a-text>
+    <!-- invisible static floor for this section -->
+    <a-plane id="grav-floor" position="7 0.05 84" rotation="-90 0 0" width="10" height="10"
+      material="visible: false" static-body="type: plane; normal: 0 1 0; offset: 0.05"></a-plane>
+    <!-- falling rigid bodies — gravity is a scene system, use default selector .rigid -->
+    <a-box class="rigid" position="5 4 84" width="0.5" height="0.5" depth="0.5"
+      material="color: #ff5544" rigid-body="mass: 1; restitution: 0.5"></a-box>
+    <a-box class="rigid" position="7 5 84" width="0.4" height="0.4" depth="0.4"
+      material="color: #44aaff" rigid-body="mass: 1; restitution: 0.7"></a-box>
+    <a-sphere class="rigid" position="9 4.5 84" radius="0.3"
+      material="color: #88ff44" rigid-body="mass: 0.5; restitution: 0.9"></a-sphere>
+    <a-box id="gravity-reset-btn" class="clickable" position="7 1.05 84" width="1" height="0.34" depth="0.3" material="color: #4477cc">
+      <a-text value="reset" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+    <a-text value="rigid-body fall" position="7 2 84" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- G4: group / group-toggle -->
+    <a-plane position="21 0.01 84" rotation="-90 0 0" width="12" height="12"
+      material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="group / group-toggle" position="21 4.5 84" align="center" color="#88ff88" width="6"></a-text>
+    <!-- group A entities -->
+    <a-box position="19 1.5 84" width="0.6" height="0.6" depth="0.6"
+      material="color: #ff6644" group="name: groupA"></a-box>
+    <a-sphere position="19 2.4 84" radius="0.3"
+      material="color: #ff9966" group="name: groupA"></a-sphere>
+    <a-text value="group A" position="19 3.1 84" align="center" color="#ff9966" width="3"></a-text>
+    <!-- group B entities -->
+    <a-box position="23 1.5 84" width="0.6" height="0.6" depth="0.6"
+      material="color: #44aaff" group="name: groupB"></a-box>
+    <a-sphere position="23 2.4 84" radius="0.3"
+      material="color: #66ccff" group="name: groupB"></a-sphere>
+    <a-text value="group B" position="23 3.1 84" align="center" color="#66ccff" width="3"></a-text>
+    <!-- toggle button: hides groupA, shows groupB -->
+    <a-box id="grp-toggle-btn" position="21 1.5 84" width="1" height="0.4" depth="0.3"
+      material="color: #ffff44"
+      group-toggle="group: groupA; visible: false; event: click"
+      class="clickable">
+      <a-text value="hide A" position="0 0 0.16" align="center" color="#000" width="3"></a-text>
+    </a-box>
+
+    <!-- Remaining Sections: H through Z -->
+    <a-text value="— SECTION H —" position="0 5.5 98" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- H1: haptics -->
+    <a-plane position="-21 0.01 98" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="haptics" position="-21 4.5 98" align="center" color="#88ff88" width="6"></a-text>
+    <a-box id="haptic-pulse-btn" class="clickable" position="-24 1.5 98" width="1" height="0.45" depth="0.3" material="color: #ff8844">
+      <a-text value="pulse" position="0 0 0.17" align="center" color="#fff" width="3"></a-text>
+    </a-box>
+    <a-box id="haptic-burst-btn" class="clickable" position="-18 1.5 98" width="1" height="0.45" depth="0.3" material="color: #aa44ff">
+      <a-text value="burst" position="0 0 0.17" align="center" color="#fff" width="3"></a-text>
+    </a-box>
+    <a-text value="left hand pulses" position="-21 3 98" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- H2: health -->
+    <a-plane position="-7 0.01 98" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="health" position="-7 4.5 98" align="center" color="#88ff88" width="6"></a-text>
+    <a-sphere id="health-target" position="-7 2 98" radius="0.6" material="color: #44ff88" health="max: 100; current: 100; autoResetOnDeath: true; resetDelay: 1500"></a-sphere>
+    <a-text id="health-label" value="HP: 100" position="-7 3.1 98" align="center" color="#fff" width="4"></a-text>
+    <a-box id="health-damage-btn" class="clickable" position="-10 1.5 98" width="0.95" height="0.45" depth="0.3" material="color: #ff4444">
+      <a-text value="-20" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+    <a-box id="health-heal-btn" class="clickable" position="-4 1.5 98" width="0.95" height="0.45" depth="0.3" material="color: #44aa44">
+      <a-text value="+20" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+
+    <!-- H3: highlight -->
+    <a-plane position="7 0.01 98" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="highlight" position="7 4.5 98" align="center" color="#88ff88" width="6"></a-text>
+    <a-box position="4 1.5 98" width="0.9" height="0.9" depth="0.9" material="color: #ff6644" highlight="color: #90e0ef; emissiveIntensity: 0.8" class="clickable"></a-box>
+    <a-sphere position="7 1.5 98" radius="0.5" material="color: #44aaff" highlight="color: #ffff66; emissiveIntensity: 0.9" class="clickable"></a-sphere>
+    <a-torus position="10 1.5 98" radius="0.45" radius-tubular="0.12" material="color: #88ff44" highlight="color: #ff44ff; emissiveIntensity: 0.7" class="clickable"></a-torus>
+
+    <a-text value="— SECTION I —" position="0 5.5 112" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- I1: interactable -->
+    <a-plane position="-14 0.01 112" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="interactable" position="-14 4.5 112" align="center" color="#88ff88" width="6"></a-text>
+    <a-box position="-17 1.5 112" width="0.9" height="0.9" depth="0.9" material="color: #4488ff" interactable class="clickable"
+      animation__press="property: material.color; to: #ffffff; startEvents: xr:interact-press; dur: 90"
+      animation__release="property: material.color; to: #4488ff; startEvents: xr:interact-release; dur: 180"></a-box>
+    <a-sphere position="-11 1.5 112" radius="0.55" material="color: #ff8844" interactable class="clickable"
+      animation__press="property: material.color; to: #ffffff; startEvents: xr:interact-press; dur: 90"
+      animation__release="property: material.color; to: #ff8844; startEvents: xr:interact-release; dur: 180"></a-sphere>
+
+    <!-- I2: inventory / inventory-pickup -->
+    <a-plane position="0 0.01 112" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="inventory / inventory-pickup" position="0 4.5 112" align="center" color="#88ff88" width="6"></a-text>
+    <a-entity id="inv-holder" position="0 2.2 112" inventory="size: 4; autoEquip: true"></a-entity>
+    <a-text id="inventory-label" value="items: 0 / 4" position="0 3.2 112" align="center" color="#fff" width="5"></a-text>
+    <a-box id="inv-item-red" class="clickable" position="-2 1.5 112" width="0.5" height="0.5" depth="0.5" material="color: #ff4444"
+      inventory-pickup="target: #inv-holder; itemId: red-cube; itemName: Red Cube; consumeOnPickup: true"></a-box>
+    <a-box id="inv-item-blue" class="clickable" position="0 1.5 112" width="0.5" height="0.5" depth="0.5" material="color: #44aaff"
+      inventory-pickup="target: #inv-holder; itemId: blue-cube; itemName: Blue Cube; consumeOnPickup: true"></a-box>
+    <a-box id="inv-item-gold" class="clickable" position="2 1.5 112" width="0.5" height="0.5" depth="0.5" material="color: #ffdd44"
+      inventory-pickup="target: #inv-holder; itemId: gold-cube; itemName: Gold Cube; consumeOnPickup: true"></a-box>
+    <a-box id="inventory-use-btn" class="clickable" position="0 0.9 112" width="1" height="0.4" depth="0.3" material="color: #33aa66">
+      <a-text value="use active" position="0 0 0.17" align="center" color="#fff" width="3.2"></a-text>
+    </a-box>
+
+    <a-text value="— SECTION J —" position="0 5.5 126" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- J1: joint-button -->
+    <a-plane position="-28 0.01 126" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="joint-button" position="-28 4.5 126" align="center" color="#88ff88" width="6"></a-text>
+    <a-box position="-28 1.5 126" width="0.8" height="0.25" depth="0.8" material="color: #ff6666"
+      interactable
+      joint-button="event: xr:interact-use; pressDepth: 0.06"
+      class="clickable"></a-box>
+    <a-text value="click to press" position="-28 2.5 126" align="center" color="#ccc" width="3"></a-text>
+
+    <!-- J2: joint-joystick -->
+    <a-plane position="-14 0.01 126" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="joint-joystick" position="-14 4.5 126" align="center" color="#88ff88" width="6"></a-text>
+    <a-cylinder position="-14 1.2 126" radius="0.35" height="0.4" material="color: #66aaff"
+      joint-joystick="event: thumbstickmoved; maxTilt: 18"></a-cylinder>
+    <a-text value="move thumbstick" position="-14 2.5 126" align="center" color="#ccc" width="3.5"></a-text>
+
+    <!-- J3: joint-lever -->
+    <a-plane position="0 0.01 126" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="joint-lever" position="0 4.5 126" align="center" color="#88ff88" width="6"></a-text>
+    <a-box position="0 1.5 126" width="0.2" height="1" depth="0.2" material="color: #ffaa44"
+      joint-lever="value: 0.7; min: -1; max: 1; axis: z; angleDeg: 45"></a-box>
+    <a-text value="value=0.7" position="0 2.5 126" align="center" color="#ccc" width="3"></a-text>
+
+    <!-- J4: joint-slider -->
+    <a-plane position="14 0.01 126" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="joint-slider" position="14 4.5 126" align="center" color="#88ff88" width="6"></a-text>
+    <a-box position="14 1.5 126" width="0.4" height="0.4" depth="0.4" material="color: #55ddaa"
+      joint-slider="value: 0.8; min: 0; max: 1; axis: x; length: 1.2"></a-box>
+    <a-entity position="14 1.2 126" geometry="primitive: box; width: 1.4; height: 0.06; depth: 0.06" material="color: #888"></a-entity>
+
+    <!-- J5: jump -->
+    <a-plane position="28 0.01 126" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="jump" position="28 4.5 126" align="center" color="#88ff88" width="6"></a-text>
+    <a-box id="jump-test" position="28 1.5 126" width="1" height="1" depth="1" material="color: #cc66ff"
+      jump="event: click; cameraRig: #rig; groundY: 0; impulse: 4"
+      class="clickable"></a-box>
+    <a-text value="click to jump rig" position="28 2.7 126" align="center" color="#ccc" width="4"></a-text>
+
+    <a-text value="— SECTION K —" position="0 5.5 140" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- K1: keyboard -->
+    <a-plane position="0 0.01 140" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="keyboard" position="0 4.5 140" align="center" color="#88ff88" width="6"></a-text>
+    <a-text value="Press keyboard keys" position="0 3.8 140" align="center" color="#888" width="5"></a-text>
+
+    <a-box id="keyboard-capture" position="-2 1.6 140" width="1" height="1" depth="1"
+      material="color: #4477ff"
+      keyboard="target: #keyboard-target"></a-box>
+    <a-text value="keyboard listener" position="-2 3 140" align="center" color="#ccc" width="3"></a-text>
+
+    <a-entity id="keyboard-target" position="2 1.6 140"
+      geometry="primitive: box; width: 1; height: 1; depth: 1"
+      material="color: #44cc88"
+      animation__down="property: material.color; to: #ff4444; startEvents: xr:key-down; dur: 100"
+      animation__up="property: material.color; to: #44cc88; startEvents: xr:key-up; dur: 120"></a-entity>
+    <a-text id="keyboard-last-key" value="last key: none" position="2 3 140" align="center" color="#ccc" width="4"></a-text>
+
+    <a-text value="— SECTION L —" position="0 5.5 154" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- L1: loading-screen -->
+    <a-plane position="0 0.01 154" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="loading-screen" position="0 4.5 154" align="center" color="#88ff88" width="6"></a-text>
+    <a-text value="show/hide DOM overlay" position="0 3.8 154" align="center" color="#888" width="5"></a-text>
+
+    <a-entity id="loading-screen-demo" position="0 1.6 154" loading-screen="text: Demo Loading...; hideOnSceneLoaded: true"></a-entity>
+
+    <a-box id="loading-show-btn" class="clickable" position="-2 1.2 154" width="1" height="0.45" depth="0.3" material="color: #44aa66">
+      <a-text value="show" position="0 0 0.17" align="center" color="#fff" width="2.8"></a-text>
+    </a-box>
+    <a-box id="loading-hide-btn" class="clickable" position="2 1.2 154" width="1" height="0.45" depth="0.3" material="color: #aa4444">
+      <a-text value="hide" position="0 0 0.17" align="center" color="#fff" width="2.8"></a-text>
+    </a-box>
+    <a-text id="loading-status" value="overlay: hidden" position="0 2.5 154" align="center" color="#ccc" width="4"></a-text>
+
+    <a-text value="— SECTION M —" position="0 5.5 168" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- M1: melee-hitbox -->
+    <a-plane position="0 0.01 168" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="melee-hitbox" position="0 4.5 168" align="center" color="#88ff88" width="6"></a-text>
+    <a-text value="click sword to attack target" position="0 3.8 168" align="center" color="#888" width="5"></a-text>
+
+    <a-box id="melee-weapon" class="clickable" position="-2 1.5 168" width="1.2" height="0.18" depth="0.18"
+      rotation="0 0 25"
+      material="color: #dddddd"
+      melee-hitbox="event: click; targets: #melee-target; range: 2; arcDeg: 120; damage: 20; maxHits: 1"
+      animation__swing="property: rotation; to: 0 0 -25; dir: alternate; startEvents: click; dur: 140"></a-box>
+
+    <a-sphere id="melee-target" position="2 1.5 168" radius="0.55"
+      material="color: #44aaff"
+      health="max: 100; current: 100; autoResetOnDeath: true; resetDelay: 1200"
+      animation__hit="property: material.color; to: #ff4444; startEvents: xr:damage; dur: 120"
+      animation__recover="property: material.color; to: #44aaff; startEvents: xr:damage; delay: 180; dur: 220"></a-sphere>
+    <a-text id="melee-hp-label" value="target hp: 100" position="2 2.8 168" align="center" color="#ccc" width="4"></a-text>
+
+    <a-text value="— SECTION N —" position="0 5.5 182" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- N1: nav-path -->
+    <a-plane position="-14 0.01 182" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="nav-path" position="-14 4.5 182" align="center" color="#88ff88" width="6"></a-text>
+    <a-entity id="nav-path-demo" position="-14 0 182" nav-path="points: -3 1 0; -1 1 -2; 1 1 -2; 3 1 0; 1 1 2; -1 1 2; loop: true"></a-entity>
+    <a-sphere position="-17 1 182" radius="0.12" material="color: #88ddff"></a-sphere>
+    <a-sphere position="-15 1 180" radius="0.12" material="color: #88ddff"></a-sphere>
+    <a-sphere position="-13 1 180" radius="0.12" material="color: #88ddff"></a-sphere>
+    <a-sphere position="-11 1 182" radius="0.12" material="color: #88ddff"></a-sphere>
+    <a-sphere position="-13 1 184" radius="0.12" material="color: #88ddff"></a-sphere>
+    <a-sphere position="-15 1 184" radius="0.12" material="color: #88ddff"></a-sphere>
+    <a-text value="route points" position="-14 2.3 182" align="center" color="#ccc" width="3"></a-text>
+
+    <!-- N2: nav-obstacle -->
+    <a-plane position="0 0.01 182" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="nav-obstacle" position="0 4.5 182" align="center" color="#88ff88" width="6"></a-text>
+    <a-cylinder position="0 1 182" radius="0.6" height="2" material="color: #ff9955; opacity: 0.75"
+      nav-obstacle="radius: 0.9; enabled: true"></a-cylinder>
+    <a-text value="avoidance blocker" position="0 2.4 182" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- N3: nav-agent -->
+    <a-plane position="14 0.01 182" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="nav-agent" position="14 4.5 182" align="center" color="#88ff88" width="6"></a-text>
+    <a-box id="nav-agent-demo" position="11 1 182" width="0.6" height="0.6" depth="0.6" material="color: #44cc88"
+      nav-agent="path: #nav-path-demo; target: #nav-target-demo; speed: 1.4; repathIntervalMs: 500; arriveDistance: 0.4; nextDistance: 0.3"></a-box>
+    <a-sphere id="nav-target-demo" position="17 1 182" radius="0.35" material="color: #ffcc44"
+      animation="property: position; to: 11 1 182; dir: alternate; dur: 2800; loop: true; easing: easeInOutSine"></a-sphere>
+    <a-text value="agent follows moving target" position="14 2.5 182" align="center" color="#ccc" width="5"></a-text>
+
+    <a-text value="— SECTION O —" position="0 5.5 196" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- O1: objective -->
+    <a-plane position="-14 0.01 196" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="objective" position="-14 4.5 196" align="center" color="#88ff88" width="6"></a-text>
+    <a-entity id="objective-collect" position="-14 1.6 196"
+      objective="id: collect-3; title: Collect 3; targetCount: 3; incrementEvent: click"></a-entity>
+    <a-box id="objective-increment-btn" class="clickable" position="-14 1.6 196" width="0.9" height="0.9" depth="0.9" material="color: #44aaff"></a-box>
+    <a-text id="objective-progress-label" value="progress: 0/3" position="-14 2.9 196" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- O2: quest -->
+    <a-plane position="0 0.01 196" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="quest" position="0 4.5 196" align="center" color="#88ff88" width="6"></a-text>
+    <a-entity id="quest-demo" quest="objectiveIds: collect-3"></a-entity>
+    <a-box id="quest-indicator" position="0 1.6 196" width="1" height="1" depth="1" material="color: #666666"></a-box>
+    <a-text id="quest-status-label" value="quest: pending" position="0 2.9 196" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- O3: origin -->
+    <a-plane position="14 0.01 196" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="origin" position="14 4.5 196" align="center" color="#88ff88" width="6"></a-text>
+    <a-box id="origin-recenter-btn" class="clickable" position="14 1.6 196" width="1" height="0.45" depth="0.3" material="color: #aa88ff">
+      <a-text value="recenter" position="0 0 0.17" align="center" color="#fff" width="3"></a-text>
+    </a-box>
+    <a-text id="origin-status-label" value="origin: idle" position="14 2.9 196" align="center" color="#ccc" width="4"></a-text>
+
+    <a-text value="— SECTION P —" position="0 5.5 210" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- P1: particle-burst -->
+    <a-plane position="-35 0.01 210" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="particle-burst" position="-35 4.5 210" align="center" color="#88ff88" width="6"></a-text>
+    <a-sphere id="particle-burst-btn" class="clickable" position="-35 1.5 210" radius="0.45" material="color: #ffd166"
+      particle-burst="event: click; count: 18; speed: 1.7; spread: 0.9; life: 900; size: 0.06; color: #ffd166"></a-sphere>
+    <a-text value="click burst" position="-35 2.6 210" align="center" color="#ccc" width="3"></a-text>
+
+    <!-- P2: passthrough-toggle -->
+    <a-plane position="-21 0.01 210" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="passthrough-toggle" position="-21 4.5 210" align="center" color="#88ff88" width="6"></a-text>
+    <a-box id="passthrough-btn" class="clickable" position="-21 1.5 210" width="1.1" height="0.5" depth="0.35" material="color: #66ccff"
+      passthrough-toggle="event: click"></a-box>
+    <a-text value="toggle sky env" position="-21 2.6 210" align="center" color="#ccc" width="3.5"></a-text>
+
+    <!-- P3: path + path-follow -->
+    <a-plane position="-7 0.01 210" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="path / path-follow" position="-7 4.5 210" align="center" color="#88ff88" width="6"></a-text>
+    <a-entity id="path-follow-demo" position="-7 0 210" path="points: -2 1 0; 0 1 -2; 2 1 0; 0 1 2; loop: true"></a-entity>
+    <a-sphere position="-9 1 210" radius="0.12" material="color: #88ddff"></a-sphere>
+    <a-sphere position="-7 1 208" radius="0.12" material="color: #88ddff"></a-sphere>
+    <a-sphere position="-5 1 210" radius="0.12" material="color: #88ddff"></a-sphere>
+    <a-sphere position="-7 1 212" radius="0.12" material="color: #88ddff"></a-sphere>
+    <a-box id="path-follower-box" position="-9 1 210" width="0.45" height="0.45" depth="0.45" material="color: #44cc88"
+      path-follow="path: #path-follow-demo; speed: 2.4; loop: true; lookAhead: true"></a-box>
+    <a-text id="path-follow-status" value="path: idle" position="-7 2.8 210" align="center" color="#ccc" width="3.8"></a-text>
+
+    <!-- P4: phone-controls -->
+    <a-plane position="7 0.01 210" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="phone-controls" position="7 4.5 210" align="center" color="#88ff88" width="6"></a-text>
+    <a-box position="7 1.5 210" width="0.7" height="1.1" depth="0.15" material="color: #334455"
+      phone-controls="enabled: true; smoothing: 0.15; yawOffset: 0"></a-box>
+    <a-text value="tilt phone to rotate" position="7 2.8 210" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- P5: pickup + pushable -->
+    <a-plane position="21 0.01 210" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="pickup / pushable" position="21 4.5 210" align="center" color="#88ff88" width="6"></a-text>
+    <a-sphere id="pickup-health-target" position="19 1.5 210" radius="0.45" material="color: #44aaff" health="max: 100; current: 60"></a-sphere>
+    <a-sphere id="pickup-orb" class="clickable" position="21 1.5 210" radius="0.35" material="color: #66ff66"
+      pickup="event: click; target: #pickup-health-target; heal: 20; respawn: true; respawnDelay: 2200"></a-sphere>
+    <a-box id="pushable-box" class="clickable" position="23 1.5 210" width="0.8" height="0.8" depth="0.8" material="color: #ffaa55"
+      interactable pushable="force: 3; event: click"></a-box>
+
+    <!-- P6: pool + projectile -->
+    <a-plane position="35 0.01 210" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="pool / projectile" position="35 4.5 210" align="center" color="#88ff88" width="6"></a-text>
+    <a-entity id="pool-template" position="32 1.2 210" geometry="primitive: box; width: 0.35; height: 0.35; depth: 0.35" material="color: #44ddff" pool-source="name: demoPool; size: 5"></a-entity>
+    <a-entity id="pool-spawn-anchor" position="35 1.1 210"></a-entity>
+    <a-entity id="pool-consumer-demo" pool-consumer="name: demoPool; acquireEvent: click; releaseEvent: xr:pool-release" position="35 0 210"></a-entity>
+    <a-box id="pool-acquire-btn" class="clickable" position="33 1.6 210" width="0.9" height="0.4" depth="0.3" material="color: #44aa88">
+      <a-text value="acquire" position="0 0 0.17" align="center" color="#fff" width="2.8"></a-text>
+    </a-box>
+    <a-box id="pool-release-btn" class="clickable" position="37 1.6 210" width="0.9" height="0.4" depth="0.3" material="color: #aa6688">
+      <a-text value="release" position="0 0 0.17" align="center" color="#fff" width="2.8"></a-text>
+    </a-box>
+
+    <a-entity id="projectile-prefab" visible="false" geometry="primitive: sphere; radius: 0.08" material="color: #ff6644"
+      projectile="speed: 12; lifeMs: 2200; gravity: 0; damage: 15; hitSelector: #projectile-target-demo"></a-entity>
+    <a-box id="projectile-launcher-demo" class="clickable" position="35 1.1 208.8" width="0.8" height="0.3" depth="0.8" material="color: #666"
+      rotation="0 180 0"
+      projectile-launcher="prefab: #projectile-prefab; fireEvent: click"></a-box>
+    <a-sphere id="projectile-target-demo" position="35 1.5 212" radius="0.4" material="color: #ffaa44" health="max: 60; current: 60"></a-sphere>
+
+    <a-text value="— SECTION R —" position="0 5.5 224" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- R1: ray-interactor -->
+    <a-plane position="-14 0.01 224" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="ray-interactor" position="-14 4.5 224" align="center" color="#88ff88" width="6"></a-text>
+    <a-text value="simulate press/release/use" position="-14 3.8 224" align="center" color="#888" width="5"></a-text>
+
+    <a-entity id="ray-interactor-demo" position="-14 1.4 227"
+      geometry="primitive: box; width: 0.12; height: 0.12; depth: 0.5"
+      material="color: #88ddff"
+      raycaster="objects: [interactable]; far: 8; showLine: true"
+      line="color: #88ddff"
+      ray-interactor="pressEvent: triggerdown; releaseEvent: triggerup; useEvent: abuttondown"></a-entity>
+
+    <a-box id="ray-target-demo" interactable position="-14 1.5 223.4" width="0.9" height="0.9" depth="0.9" material="color: #6666aa"
+      animation__press="property: material.color; to: #ffd166; startEvents: xr:interact-press; dur: 120"
+      animation__release="property: material.color; to: #66aaff; startEvents: xr:interact-release; dur: 120"
+      animation__use="property: material.color; to: #66ff99; startEvents: xr:interact-use; dur: 120"></a-box>
+
+    <a-box id="ray-press-btn" class="clickable" position="-17 1.1 224" width="0.9" height="0.4" depth="0.3" material="color: #4477aa">
+      <a-text value="press" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+    <a-box id="ray-release-btn" class="clickable" position="-14 1.1 224" width="0.9" height="0.4" depth="0.3" material="color: #7755aa">
+      <a-text value="release" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+    <a-box id="ray-use-btn" class="clickable" position="-11 1.1 224" width="0.9" height="0.4" depth="0.3" material="color: #44aa77">
+      <a-text value="use" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+    <a-text id="ray-status-label" value="target: idle" position="-14 2.7 224" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- R2: rigid-body -->
+    <a-plane position="14 0.01 224" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="rigid-body" position="14 4.5 224" align="center" color="#88ff88" width="6"></a-text>
+    <a-text value="apply impulses to cube" position="14 3.8 224" align="center" color="#888" width="5"></a-text>
+
+    <a-box id="rigid-demo-body" position="14 3 224" width="0.7" height="0.7" depth="0.7" material="color: #ff9955"
+      rigid-body="mass: 1; restitution: 0.45; friction: 0.03; radius: 0.35"></a-box>
+
+    <a-box id="rigid-push-up-btn" class="clickable" position="11.5 1.1 224" width="1" height="0.4" depth="0.3" material="color: #44aa88">
+      <a-text value="push up" position="0 0 0.17" align="center" color="#fff" width="2.6"></a-text>
+    </a-box>
+    <a-box id="rigid-push-side-btn" class="clickable" position="14 1.1 224" width="1" height="0.4" depth="0.3" material="color: #4477cc">
+      <a-text value="push side" position="0 0 0.17" align="center" color="#fff" width="2.6"></a-text>
+    </a-box>
+    <a-box id="rigid-reset-btn" class="clickable" position="16.5 1.1 224" width="1" height="0.4" depth="0.3" material="color: #aa5555">
+      <a-text value="reset" position="0 0 0.17" align="center" color="#fff" width="2.6"></a-text>
+    </a-box>
+    <a-text id="rigid-status-label" value="body: ready" position="14 2.7 224" align="center" color="#ccc" width="4"></a-text>
+
+    <a-text value="— SECTION S —" position="0 5.5 238" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- S1: save-game / save-game-profile / save-state -->
+    <a-plane position="-35 0.01 238" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="save-game / save-state" position="-35 4.5 238" align="center" color="#88ff88" width="6"></a-text>
+    <a-entity id="s-save-profile" save-game-profile="include: #s-save-box">
+      <a-box id="s-save-box" position="-35 1.4 238" width="0.9" height="0.9" depth="0.9" material="color: #6699ff"
+        state-machine="initial: idle"
+        save-state="key: section-s:save-box; components: state-machine, material"></a-box>
+    </a-entity>
+    <a-box id="s-state-next-btn" class="clickable" position="-37.2 1.1 238" width="0.85" height="0.35" depth="0.3" material="color: #7b5bd6">
+      <a-text value="next" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+    <a-box id="s-save-btn" class="clickable" position="-35 1.1 238" width="0.85" height="0.35" depth="0.3" material="color: #44aa66">
+      <a-text value="save" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+    <a-box id="s-load-btn" class="clickable" position="-32.8 1.1 238" width="0.85" height="0.35" depth="0.3" material="color: #4477aa">
+      <a-text value="load" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+    <a-box id="s-clear-btn" class="clickable" position="-35 0.65 238" width="0.9" height="0.32" depth="0.3" material="color: #aa5555">
+      <a-text value="clear" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+    <a-text id="s-save-status" value="profile: idle" position="-35 2.6 238" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- S2: score / score-listener / score-display / shooter -->
+    <a-plane position="-21 0.01 238" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="score / shooter" position="-21 4.5 238" align="center" color="#88ff88" width="6"></a-text>
+    <a-entity id="s-score-listener" score-listener="event: xr:target-destroyed; points: 5; target: #s-shooter-target"></a-entity>
+    <a-text id="s-score-display" position="-21 3.2 238" align="center" color="#fff" width="5" score-display="prefix: score: "></a-text>
+    <a-box id="s-shooter" position="-23.3 1.3 238" width="0.8" height="0.3" depth="0.8" rotation="0 90 0" material="color: #666"
+      shooter="activeBulletType: redBullet; bulletTypes: redBullet"></a-box>
+    <a-sphere id="s-shooter-target" position="-18.8 1.5 238" radius="0.45" material="color: #ffaa44"
+      target="healthPoints: 20; active: true"></a-sphere>
+    <a-box id="s-shoot-btn" class="clickable" position="-22.2 1.1 238" width="0.9" height="0.35" depth="0.3" material="color: #44aa66">
+      <a-text value="shoot" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+    <a-box id="s-score-reset-btn" class="clickable" position="-19.8 1.1 238" width="0.9" height="0.35" depth="0.3" material="color: #aa5555">
+      <a-text value="reset" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+
+    <!-- S3: smooth-move / smooth-turn / snap-turn / swing-movement -->
+    <a-plane position="-7 0.01 238" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="smooth/snap/swing" position="-7 4.5 238" align="center" color="#88ff88" width="6"></a-text>
+    <a-entity id="s-smooth-move-proxy" smooth-move="cameraRig: #rig; speed: 2"></a-entity>
+    <a-entity id="s-smooth-turn-proxy" smooth-turn="cameraRig: #rig; speedDeg: 80"></a-entity>
+    <a-entity id="s-snap-turn-proxy" snap-turn="cameraRig: #rig; stepDeg: 30; threshold: 0.6"></a-entity>
+    <a-entity id="s-swing-proxy" swing-movement="cameraRig: #rig; leftHand: #leftHand; rightHand: #rightHand; gain: 0.55"></a-entity>
+    <a-box id="s-move-forward-btn" class="clickable" position="-8.8 1.1 238" width="1" height="0.35" depth="0.3" material="color: #44aa88">
+      <a-text value="forward" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+    <a-box id="s-turn-left-btn" class="clickable" position="-7 1.1 238" width="1" height="0.35" depth="0.3" material="color: #4477cc">
+      <a-text value="turn L" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+    <a-box id="s-turn-right-btn" class="clickable" position="-5.2 1.1 238" width="1" height="0.35" depth="0.3" material="color: #4477cc">
+      <a-text value="turn R" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+    <a-box id="s-snap-left-btn" class="clickable" position="-8.1 0.65 238" width="1" height="0.32" depth="0.3" material="color: #8866cc">
+      <a-text value="snap L" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+    <a-box id="s-snap-right-btn" class="clickable" position="-5.9 0.65 238" width="1" height="0.32" depth="0.3" material="color: #8866cc">
+      <a-text value="snap R" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+    <a-text id="s-locomotion-status" value="locomotion: idle" position="-7 2.6 238" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- S4: snappable / snap-zone / softbody / spawner -->
+    <a-plane position="7 0.01 238" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="snap / softbody / spawner" position="7 4.5 238" align="center" color="#88ff88" width="6"></a-text>
+    <a-ring id="s-snap-zone" position="7 0.08 238" rotation="-90 0 0" radius-inner="0.55" radius-outer="0.8" material="color: #66aaff; opacity: 0.45"
+      snap-zone="radius: 0.9; autoSnap: false; selector: #s-snappable-item"></a-ring>
+    <a-box id="s-snappable-item" class="clickable" position="4.9 1.1 238" width="0.5" height="0.5" depth="0.5" material="color: #ffaa55" snappable></a-box>
+    <a-sphere id="s-softbody-demo" position="9.3 1.35 238" radius="0.4" material="color: #ff7788" softbody="amplitude: 0.08; speed: 4"></a-sphere>
+    <a-entity id="s-spawn-prefab" visible="false" geometry="primitive: sphere; radius: 0.14" material="color: #88e0ff"></a-entity>
+    <a-entity id="s-spawner" position="7 0.2 240" spawner="prefab: #s-spawn-prefab; event: xr:spawn; maxAlive: 6; radius: 1.8"></a-entity>
+    <a-box id="s-snap-btn" class="clickable" position="5.5 0.7 238" width="0.9" height="0.32" depth="0.3" material="color: #4477aa">
+      <a-text value="snap" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+    <a-box id="s-softbody-hit-btn" class="clickable" position="8.5 0.7 238" width="1.1" height="0.32" depth="0.3" material="color: #aa5555">
+      <a-text value="impact" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+    <a-box id="s-spawn-btn" class="clickable" position="7 0.7 240" width="1" height="0.32" depth="0.3" material="color: #44aa66">
+      <a-text value="spawn" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+    <a-text id="s-snap-spawn-status" value="snap/spawn: idle" position="7 2.6 238" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- S5: toon-shader / normals-shader / sprite / static-body -->
+    <a-plane position="21 0.01 238" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="special shaders / sprite / static-body" position="21 4.5 238" align="center" color="#88ff88" width="6"></a-text>
+    <a-text value="Toon + normals variants for distinct looks" position="21 3.8 238" align="center" color="#888" width="5"></a-text>
+    <a-plane id="s-static-floor" position="21 0.05 238" rotation="-90 0 0" width="10" height="10" material="visible: false" static-body></a-plane>
+    <a-box id="s-static-fall-box" position="24 3.2 238" width="0.45" height="0.45" depth="0.45" material="color: #ffaa55"
+      rigid-body="mass: 1; restitution: 0.4"></a-box>
+    <a-entity position="17.8 1.35 238" geometry="primitive: dodecahedron; radius: 0.4" material="color: #ffdd66"
+      rotation="0 30 0"
+      toon-shader="color: #ffdd66; levels: 2; emissive: #331a00"></a-entity>
+    <a-text value="toon 2-step" position="17.8 2.2 238" align="center" color="#ccc" width="2.4"></a-text>
+
+    <a-entity position="19.9 1.35 238" geometry="primitive: octahedron; radius: 0.42" material="color: #ff88bb"
+      rotation="0 20 0"
+      toon-shader="color: #ff66aa; levels: 6; emissive: #120012"></a-entity>
+    <a-text value="toon 6-step" position="19.9 2.2 238" align="center" color="#ccc" width="2.4"></a-text>
+
+    <a-entity position="22 1.35 238" geometry="primitive: icosahedron; radius: 0.42" material="color: #88aaff"
+      normals-shader="wireframe: false; flatShading: false"></a-entity>
+    <a-text value="normals smooth" position="22 2.2 238" align="center" color="#ccc" width="2.6"></a-text>
+
+    <a-entity position="24.1 1.35 238" geometry="primitive: tetrahedron; radius: 0.5" material="color: #aaffff"
+      normals-shader="wireframe: true; flatShading: true"></a-entity>
+    <a-text value="normals wire" position="24.1 2.2 238" align="center" color="#ccc" width="2.4"></a-text>
+
+    <a-entity position="26.2 1.35 238" sprite="width: 0.8; height: 0.8; billboard: true" material="color: #66ddff"></a-entity>
+    <a-text value="sprite" position="26.2 2.2 238" align="center" color="#ccc" width="2"></a-text>
+
+    <!-- S6: state-machine / status-effects / super-keyboard -->
+    <a-plane position="35 0.01 238" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="state/effects/keyboard" position="35 4.5 238" align="center" color="#88ff88" width="6"></a-text>
+    <a-box id="s-effect-target" position="33.2 1.4 238" width="0.8" height="0.8" depth="0.8" material="color: #6688ff"
+      health="max: 100; current: 100"
+      state-machine="initial: idle"
+      status-effects></a-box>
+    <a-entity id="s-super-kb" position="36.8 1.2 238" rotation="-20 180 0"
+      super-keyboard="value: demo; width: 0.6; show: false; label: S keyboard"></a-entity>
+    <a-box id="s-effect-burn-btn" class="clickable" position="33.1 0.75 238" width="0.85" height="0.32" depth="0.3" material="color: #cc6644">
+      <a-text value="burn" position="0 0 0.17" align="center" color="#fff" width="2.2"></a-text>
+    </a-box>
+    <a-box id="s-effect-clear-btn" class="clickable" position="35 0.75 238" width="0.95" height="0.32" depth="0.3" material="color: #446688">
+      <a-text value="clear fx" position="0 0 0.17" align="center" color="#fff" width="2.2"></a-text>
+    </a-box>
+    <a-box id="s-state-next2-btn" class="clickable" position="36.9 0.75 238" width="0.95" height="0.32" depth="0.3" material="color: #7b5bd6">
+      <a-text value="state" position="0 0 0.17" align="center" color="#fff" width="2.2"></a-text>
+    </a-box>
+    <a-box id="s-kb-toggle-btn" class="clickable" position="35 0.35 238" width="1.1" height="0.3" depth="0.3" material="color: #44aa66">
+      <a-text value="toggle kb" position="0 0 0.17" align="center" color="#fff" width="2.3"></a-text>
+    </a-box>
+    <a-text id="s-effect-status" value="state: idle | fx: none" position="35 2.7 238" align="center" color="#ccc" width="5"></a-text>
+
+    <a-text value="— SECTION T —" position="0 5.5 252" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- T1: target -->
+    <a-plane position="-14 0.01 252" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="target" position="-14 4.5 252" align="center" color="#88ff88" width="6"></a-text>
+    <a-entity id="t-bullet-prefab" visible="false"
+      geometry="primitive: sphere; radius: 0.07"
+      material="color: #ff6666"
+      bullet="name: tBullet; poolSize: 7; speed: 9; maxTime: 2.4; damagePoints: 8"></a-entity>
+    <a-box id="t-shooter" position="-16.2 1.2 252" width="0.75" height="0.28" depth="0.75" rotation="0 -90 0" material="color: #555"
+      shooter="activeBulletType: tBullet; bulletTypes: tBullet"></a-box>
+    <a-sphere id="t-target-demo" position="-11.6 1.5 252" radius="0.45" material="color: #ffaa44"
+      target="healthPoints: 24; active: true"></a-sphere>
+    <a-box id="t-shoot-btn" class="clickable" position="-14 1 252" width="0.95" height="0.35" depth="0.3" material="color: #44aa66">
+      <a-text value="shoot target" position="0 0 0.17" align="center" color="#fff" width="2.6"></a-text>
+    </a-box>
+    <a-text id="t-target-status" value="target hp: 24" position="-14 2.6 252" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- T2: teleport -->
+    <a-plane position="0 0.01 252" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="teleport" position="0 4.5 252" align="center" color="#88ff88" width="6"></a-text>
+    <a-box id="t-teleport-probe" position="0 1.5 252" width="0.18" height="0.18" depth="0.7" rotation="0 0 0" material="color: #88ddff"
+      teleport="event: xr:teleport-now; cameraRig: #rig; surfaces: .t-teleportable"></a-box>
+    <a-circle class="t-teleportable" position="0 0.03 258" rotation="-90 0 0" radius="1.3" material="color: #66ccff; opacity: 0.45"></a-circle>
+    <a-text value="teleport pad" position="0 0.65 258" align="center" color="#66ccff" width="3"></a-text>
+    <a-box id="t-teleport-btn" class="clickable" position="0 1 252" width="0.95" height="0.35" depth="0.3" material="color: #4477cc">
+      <a-text value="teleport" position="0 0 0.17" align="center" color="#fff" width="2.6"></a-text>
+    </a-box>
+    <a-text id="t-teleport-status" value="teleport: idle" position="0 2.6 252" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- T3: timed-spawner -->
+    <a-plane position="14 0.01 252" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="timed-spawner" position="14 4.5 252" align="center" color="#88ff88" width="6"></a-text>
+    <a-entity id="t-spawn-prefab" visible="false" class="t-spawned"
+      geometry="primitive: octahedron; radius: 0.2"
+      material="color: #88ffcc"></a-entity>
+    <a-entity id="t-timed-spawner" position="14 1.1 252"
+      timed-spawner="prefab: #t-spawn-prefab; interval: 0; maxAlive: 6; radius: 2.2; enabled: true"></a-entity>
+    <a-box id="t-spawn-once-btn" class="clickable" position="12.2 1 252" width="1" height="0.35" depth="0.3" material="color: #44aa66">
+      <a-text value="spawn" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+    <a-box id="t-spawn-clear-btn" class="clickable" position="15.8 1 252" width="1" height="0.35" depth="0.3" material="color: #aa5555">
+      <a-text value="clear" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+    <a-text id="t-spawn-status" value="spawned: 0" position="14 2.6 252" align="center" color="#ccc" width="4"></a-text>
+
+    <a-text value="— SECTION U —" position="0 5.5 266" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- U1: ui-overlay / ui-panel / ui-label -->
+    <a-plane position="-14 0.01 266" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="ui-panel / ui-label" position="-14 4.5 266" align="center" color="#88ff88" width="6"></a-text>
+    <a-entity id="u-panel-demo" ui-panel="title: U Panel; html: Overlay panel is active.; x: 18; y: 22; width: 280; height: 120; visible: true"></a-entity>
+    <a-entity id="u-label-demo" ui-label="text: status: online; x: 22; y: 152; size: 14; visible: true"></a-entity>
+    <a-box id="u-panel-toggle-btn" class="clickable" position="-16.1 1.1 266" width="1.1" height="0.35" depth="0.3" material="color: #4477cc">
+      <a-text value="toggle panel" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+    <a-box id="u-label-toggle-btn" class="clickable" position="-11.9 1.1 266" width="1.1" height="0.35" depth="0.3" material="color: #44aa66">
+      <a-text value="toggle label" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+    <a-text id="u-overlay-status" value="overlay ui: visible" position="-14 2.6 266" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- U2: ui-bar -->
+    <a-plane position="0 0.01 266" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="ui-bar" position="0 4.5 266" align="center" color="#88ff88" width="6"></a-text>
+    <a-sphere id="u-bar-health-target" position="0 1.5 266" radius="0.5" material="color: #66aaff" health="max: 100; current: 70"></a-sphere>
+    <a-entity id="u-bar-demo"
+      ui-bar="title: HP; value: 70; min: 0; max: 100; event: xr:health-changed; field: current; source: #u-bar-health-target; x: 330; y: 22; width: 260; visible: true"></a-entity>
+    <a-box id="u-bar-dmg-btn" class="clickable" position="-1.6 1.1 266" width="0.9" height="0.35" depth="0.3" material="color: #aa5555">
+      <a-text value="damage" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+    <a-box id="u-bar-heal-btn" class="clickable" position="1.6 1.1 266" width="0.9" height="0.35" depth="0.3" material="color: #44aa66">
+      <a-text value="heal" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+    <a-text id="u-bar-status" value="hp: 70" position="0 2.6 266" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- U3: ui-menu -->
+    <a-plane position="14 0.01 266" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="ui-menu" position="14 4.5 266" align="center" color="#88ff88" width="6"></a-text>
+    <a-entity id="u-menu-demo" ui-menu="title: U Menu; options: Start,Alert,Reset; x: 610; y: 22; width: 220; target: #u-menu-target; emitEvent: xr:u-menu"></a-entity>
+    <a-entity id="u-menu-target"></a-entity>
+    <a-box id="u-menu-toggle-btn" class="clickable" position="14 1.1 266" width="1.1" height="0.35" depth="0.3" material="color: #7755aa">
+      <a-text value="toggle menu" position="0 0 0.17" align="center" color="#fff" width="2.5"></a-text>
+    </a-box>
+    <a-text id="u-menu-status" value="menu: idle" position="14 2.6 266" align="center" color="#ccc" width="4"></a-text>
+
+    <a-text value="— SECTION V —" position="0 5.5 280" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- V1: vignette -->
+    <a-plane position="0 0.01 280" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="vignette" position="0 4.5 280" align="center" color="#88ff88" width="6"></a-text>
+    <a-text value="camera comfort mask controls" position="0 3.8 280" align="center" color="#888" width="5"></a-text>
+
+    <a-box id="vignette-toggle-btn" class="clickable" position="-2.6 1.1 280" width="1.1" height="0.38" depth="0.3" material="color: #4477cc">
+      <a-text value="toggle" position="0 0 0.17" align="center" color="#fff" width="2.6"></a-text>
+    </a-box>
+    <a-box id="vignette-more-btn" class="clickable" position="0 1.1 280" width="1.1" height="0.38" depth="0.3" material="color: #44aa66">
+      <a-text value="intensity+" position="0 0 0.17" align="center" color="#fff" width="2.6"></a-text>
+    </a-box>
+    <a-box id="vignette-less-btn" class="clickable" position="2.6 1.1 280" width="1.1" height="0.38" depth="0.3" material="color: #aa5555">
+      <a-text value="intensity-" position="0 0 0.17" align="center" color="#fff" width="2.6"></a-text>
+    </a-box>
+    <a-box id="vignette-radius-btn" class="clickable" position="0 0.62 280" width="1.2" height="0.34" depth="0.3" material="color: #7755aa">
+      <a-text value="cycle radius" position="0 0 0.17" align="center" color="#fff" width="2.8"></a-text>
+    </a-box>
+    <a-text id="vignette-status" value="vignette: off" position="0 2.65 280" align="center" color="#ccc" width="4.5"></a-text>
+
+    <a-text value="— SECTION W —" position="0 5.5 294" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- W1: wasd-plus -->
+    <a-plane position="-14 0.01 294" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="wasd-plus" position="-14 4.5 294" align="center" color="#88ff88" width="6"></a-text>
+    <a-text value="simulate key movement" position="-14 3.8 294" align="center" color="#888" width="5"></a-text>
+    <a-box id="w-forward-btn" class="clickable" position="-14 1.25 294" width="0.95" height="0.34" depth="0.3" material="color: #4477cc">
+      <a-text value="W forward" position="0 0 0.17" align="center" color="#fff" width="2.6"></a-text>
+    </a-box>
+    <a-box id="w-left-btn" class="clickable" position="-15.4 0.8 294" width="0.85" height="0.32" depth="0.3" material="color: #446688">
+      <a-text value="A" position="0 0 0.17" align="center" color="#fff" width="2.2"></a-text>
+    </a-box>
+    <a-box id="w-right-btn" class="clickable" position="-12.6 0.8 294" width="0.85" height="0.32" depth="0.3" material="color: #446688">
+      <a-text value="D" position="0 0 0.17" align="center" color="#fff" width="2.2"></a-text>
+    </a-box>
+    <a-text id="w-wasd-status" value="wasd: idle" position="-14 2.55 294" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- W2: ammo / weapon -->
+    <a-plane position="0 0.01 294" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="ammo / weapon" position="0 4.5 294" align="center" color="#88ff88" width="6"></a-text>
+    <a-box id="w-weapon" position="-1.8 1.4 294" width="0.9" height="0.22" depth="0.22" rotation="0 20 0" material="color: #777"
+      ammo="clipSize: 6; clip: 6; reserve: 18; reloadTime: 900; autoReload: false"
+      weapon="fireEvent: xr:w-fire; actionEvent: xr:w-action; cooldownMs: 180; requireAmmo: true"></a-box>
+    <a-sphere id="w-weapon-target" position="2 1.5 294" radius="0.45" material="color: #ffaa44" health="max: 60; current: 60"></a-sphere>
+    <a-box id="w-fire-btn" class="clickable" position="-1.2 0.95 294" width="0.9" height="0.32" depth="0.3" material="color: #44aa66">
+      <a-text value="fire" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+    <a-box id="w-reload-btn" class="clickable" position="0.7 0.95 294" width="0.9" height="0.32" depth="0.3" material="color: #7755aa">
+      <a-text value="reload" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+    <a-text id="w-ammo-status" value="ammo: 6 / 18" position="0 2.55 294" align="center" color="#ccc" width="4"></a-text>
+
+    <!-- W3: world-ground / world-platforms / world-scatter / world-grab -->
+    <a-plane position="14 0.01 294" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="world build / world-grab" position="14 4.5 294" align="center" color="#88ff88" width="6"></a-text>
+    <a-entity id="w-world-demo" position="14 0.01 294">
+      <a-entity id="w-ground" world-ground="width: 8; depth: 8; color: #2d3b49; withStaticBody: false"></a-entity>
+      <a-entity id="w-platforms" world-platforms="countX: 2; countZ: 2; spacing: 2.3; minHeight: 0.4; maxHeight: 1.2; color: #4cc9f0"></a-entity>
+      <a-entity id="w-scatter" world-scatter="count: 8; radius: 3.1; minScale: 0.25; maxScale: 0.6; y: 0; color: #8f6bb3"></a-entity>
+    </a-entity>
+    <a-entity id="w-world-grab-proxy" position="14 1.25 294" world-grab="event: xr:w-grab-start; endEvent: xr:w-grab-end; cameraRig: #rig; speed: 1.4"></a-entity>
+    <a-box id="w-rebuild-world-btn" class="clickable" position="12 0.95 294" width="1.2" height="0.34" depth="0.3" material="color: #4477cc">
+      <a-text value="rebuild" position="0 0 0.17" align="center" color="#fff" width="2.7"></a-text>
+    </a-box>
+    <a-box id="w-world-grab-btn" class="clickable" position="16 0.95 294" width="1.2" height="0.34" depth="0.3" material="color: #aa6644">
+      <a-text value="world grab" position="0 0 0.17" align="center" color="#fff" width="2.7"></a-text>
+    </a-box>
+    <a-text id="w-world-status" value="world: ready" position="14 2.55 294" align="center" color="#ccc" width="4"></a-text>
+
+    <a-text value="— SECTION Z —" position="0 5.5 308" align="center" color="#aaddff" width="10"></a-text>
+
+    <!-- Z1: zone-trigger -->
+    <a-plane position="0 0.01 308" rotation="-90 0 0" width="12" height="12" material="color: #c0c0c0; metalness: 0.9; roughness: 0.1"></a-plane>
+    <a-text value="zone-trigger" position="0 4.5 308" align="center" color="#88ff88" width="6"></a-text>
+    <a-text value="move probe into/out of zone" position="0 3.8 308" align="center" color="#888" width="5"></a-text>
+
+    <a-box id="z-zone-box" position="0 1.5 308" width="2.6" height="2" depth="2.6"
+      material="color: #55aaff; opacity: 0.18; transparent: true"
+      zone-trigger="target: #z-probe; shape: box; size: 2.6 2 2.6; enterEvent: xr:z-enter; exitEvent: xr:z-exit; stayEvent: xr:z-stay"></a-box>
+    <a-box id="z-probe" position="-3 1.5 308" width="0.45" height="0.45" depth="0.45" material="color: #ffaa55"></a-box>
+
+    <a-box id="z-enter-btn" class="clickable" position="-2.2 1 308" width="1" height="0.34" depth="0.3" material="color: #44aa66">
+      <a-text value="enter" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+    <a-box id="z-exit-btn" class="clickable" position="0 1 308" width="1" height="0.34" depth="0.3" material="color: #aa5555">
+      <a-text value="exit" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+    <a-box id="z-reset-btn" class="clickable" position="2.2 1 308" width="1" height="0.34" depth="0.3" material="color: #4477cc">
+      <a-text value="reset" position="0 0 0.17" align="center" color="#fff" width="2.4"></a-text>
+    </a-box>
+    <a-text id="z-status" value="zone: idle" position="0 2.6 308" align="center" color="#ccc" width="4.5"></a-text>
+
+    </a-entity>
+
+  </a-scene>
+  <script>
+    window.addEventListener('load', () => {
+      const leftHand = document.getElementById('leftHand');
+      const hapticPulseBtn = document.getElementById('haptic-pulse-btn');
+      const hapticBurstBtn = document.getElementById('haptic-burst-btn');
+      if (hapticPulseBtn && leftHand) {
+        hapticPulseBtn.addEventListener('click', () => {
+          leftHand.emit('haptic-pulse', { intensity: 0.85, duration: 50 });
+        });
+      }
+      if (hapticBurstBtn && leftHand) {
+        hapticBurstBtn.addEventListener('click', () => {
+          leftHand.emit('haptic-burst', { count: 3, intensity: 0.6, duration: 35, gap: 80 });
+        });
+      }
+
+      const decalWall = document.getElementById('decal-wall');
+      if (decalWall) {
+        decalWall.addEventListener('click', (e) => {
+          const decalSystem = decalWall.sceneEl?.systems?.decal;
+          if (!decalSystem || typeof decalSystem.addDecal !== 'function') return;
+
+          const hit = e?.detail?.intersection;
+          const point = hit?.point?.clone() || decalWall.object3D.getWorldPosition(new THREE.Vector3());
+          const normal = new THREE.Vector3(0, 0, 1);
+
+          if (hit?.face?.normal) {
+            normal.copy(hit.face.normal);
+            const nMat = new THREE.Matrix3().getNormalMatrix(decalWall.object3D.matrixWorld);
+            normal.applyMatrix3(nMat).normalize();
+          }
+
+          const lookAtPoint = point.clone().add(normal);
+          decalSystem.addDecal(point, lookAtPoint);
+        });
+      }
+
+      const gravityResetBtn = document.getElementById('gravity-reset-btn');
+      if (gravityResetBtn) {
+        gravityResetBtn.addEventListener('click', () => {
+          const bodies = gravityResetBtn.sceneEl.querySelectorAll('#sections-root .rigid');
+          const resets = [
+            { x: 5, y: 4, z: 84 },
+            { x: 7, y: 5, z: 84 },
+            { x: 9, y: 4.5, z: 84 }
+          ];
+          for (let i = 0; i < bodies.length && i < resets.length; i++) {
+            bodies[i].object3D.position.set(resets[i].x, resets[i].y, resets[i].z);
+            const rb = bodies[i].components['rigid-body'];
+            if (rb?.velocity) rb.velocity.set(0, 0, 0);
+          }
+        });
+      }
+
+      const collisionCube = document.getElementById('collision-cube');
+      const collisionDetector = document.getElementById('collision-detector');
+      if (collisionCube && collisionDetector) {
+        collisionDetector.addEventListener('xr:collision-enter', () => {
+          collisionCube.setAttribute('material', 'color: #ff3344');
+          collisionCube.setAttribute('animation__pulse', 'property: scale; to: 1.25 1.25 1.25; dir: alternate; dur: 120; loop: 2');
+        });
+        collisionDetector.addEventListener('xr:collision-exit', () => {
+          collisionCube.setAttribute('material', 'color: #44ff44');
+          collisionCube.setAttribute('scale', '1 1 1');
+        });
+      }
+
+      const healthTarget = document.getElementById('health-target');
+      const healthLabel = document.getElementById('health-label');
+      const dmgBtn = document.getElementById('health-damage-btn');
+      const healBtn = document.getElementById('health-heal-btn');
+      if (healthTarget && healthLabel) {
+        healthTarget.addEventListener('xr:health-changed', (e) => {
+          healthLabel.setAttribute('value', `HP: ${Math.round(e.detail.current)}`);
+        });
+        if (dmgBtn) dmgBtn.addEventListener('click', () => healthTarget.emit('damage', { amount: 20 }));
+        if (healBtn) healBtn.addEventListener('click', () => healthTarget.emit('heal', { amount: 20 }));
+      }
+
+      const invHolder = document.getElementById('inv-holder');
+      const invLabel = document.getElementById('inventory-label');
+      const invUseBtn = document.getElementById('inventory-use-btn');
+      if (invHolder && invLabel) {
+        invHolder.addEventListener('xr:inventory-changed', (e) => {
+          const count = e.detail.items.length;
+          invLabel.setAttribute('value', `items: ${count} / ${e.detail.size}`);
+        });
+        if (invUseBtn) {
+          invUseBtn.addEventListener('click', () => {
+            invHolder.emit('xr:inventory-use', {});
+          });
+        }
+      }
+
+      const keyboardTarget = document.getElementById('keyboard-target');
+      const keyboardLastKey = document.getElementById('keyboard-last-key');
+      if (keyboardTarget && keyboardLastKey) {
+        keyboardTarget.addEventListener('xr:key-down', (e) => {
+          const key = e?.detail?.key || e?.detail?.code || '?';
+          keyboardLastKey.setAttribute('value', `last key: ${key}`);
+        });
+      }
+
+      const loadingDemo = document.getElementById('loading-screen-demo');
+      const loadingShowBtn = document.getElementById('loading-show-btn');
+      const loadingHideBtn = document.getElementById('loading-hide-btn');
+      const loadingStatus = document.getElementById('loading-status');
+      if (loadingDemo?.components['loading-screen']) {
+        const loadingComp = loadingDemo.components['loading-screen'];
+        loadingComp.hide();
+        if (loadingStatus) loadingStatus.setAttribute('value', 'overlay: hidden');
+        if (loadingShowBtn) {
+          loadingShowBtn.addEventListener('click', () => {
+            loadingComp.show('Demo Loading...');
+            if (loadingStatus) loadingStatus.setAttribute('value', 'overlay: visible');
+          });
+        }
+        if (loadingHideBtn) {
+          loadingHideBtn.addEventListener('click', () => {
+            loadingComp.hide();
+            if (loadingStatus) loadingStatus.setAttribute('value', 'overlay: hidden');
+          });
+        }
+      }
+
+      const meleeTarget = document.getElementById('melee-target');
+      const meleeHpLabel = document.getElementById('melee-hp-label');
+      if (meleeTarget && meleeHpLabel) {
+        meleeTarget.addEventListener('xr:health-changed', (e) => {
+          meleeHpLabel.setAttribute('value', `target hp: ${Math.round(e.detail.current)}`);
+        });
+      }
+
+      const poolConsumer = document.getElementById('pool-consumer-demo');
+      const poolAcquireBtn = document.getElementById('pool-acquire-btn');
+      const poolReleaseBtn = document.getElementById('pool-release-btn');
+      const poolSpawnAnchor = document.getElementById('pool-spawn-anchor');
+      const pathFollowerBox = document.getElementById('path-follower-box');
+      const pathFollowStatus = document.getElementById('path-follow-status');
+      let lastPooledEntity = null;
+      if (poolConsumer) {
+        poolConsumer.addEventListener('xr:pool-acquired', (e) => {
+          const ent = e?.detail?.entity;
+          if (!ent) return;
+          lastPooledEntity = ent;
+          if (poolSpawnAnchor) {
+            poolSpawnAnchor.object3D.getWorldPosition(ent.object3D.position);
+            poolSpawnAnchor.object3D.getWorldQuaternion(ent.object3D.quaternion);
+          }
+        });
+      }
+
+      if (pathFollowerBox && pathFollowStatus) {
+        pathFollowerBox.addEventListener('xr:path-follow-point', (e) => {
+          const idx = e?.detail?.index ?? 0;
+          pathFollowStatus.setAttribute('value', `path: point ${idx}`);
+        });
+      }
+      if (poolAcquireBtn && poolConsumer) {
+        poolAcquireBtn.addEventListener('click', () => {
+          poolConsumer.emit('click');
+        });
+      }
+      if (poolReleaseBtn && poolConsumer) {
+        poolReleaseBtn.addEventListener('click', () => {
+          poolConsumer.emit('xr:pool-release', { entity: lastPooledEntity });
+          lastPooledEntity = null;
+        });
+      }
+
+      const objectiveEl = document.getElementById('objective-collect');
+      const objectiveLabel = document.getElementById('objective-progress-label');
+      const objectiveBtn = document.getElementById('objective-increment-btn');
+      if (objectiveEl && objectiveLabel) {
+        if (objectiveBtn) {
+          objectiveBtn.addEventListener('click', () => {
+            objectiveEl.emit('click', { amount: 1, source: objectiveBtn });
+          });
+        }
+        objectiveEl.addEventListener('xr:objective-progress', (e) => {
+          objectiveLabel.setAttribute('value', `progress: ${e.detail.progress}/${e.detail.targetCount}`);
+        });
+        objectiveEl.addEventListener('xr:objective-completed', () => {
+          objectiveLabel.setAttribute('value', 'progress: complete');
+          if (objectiveBtn) objectiveBtn.setAttribute('material', 'color: #44dd44');
+        });
+      }
+
+      const questEl = document.getElementById('quest-demo');
+      const questIndicator = document.getElementById('quest-indicator');
+      const questStatus = document.getElementById('quest-status-label');
+      if (questEl && questIndicator && questStatus) {
+        questEl.addEventListener('xr:quest-completed', () => {
+          questIndicator.setAttribute('material', 'color: #ffd84d');
+          questStatus.setAttribute('value', 'quest: completed');
+        });
+      }
+
+      const originBtn = document.getElementById('origin-recenter-btn');
+      const originStatus = document.getElementById('origin-status-label');
+      const rig = document.getElementById('rig');
+      if (originBtn && rig && originStatus) {
+        originBtn.addEventListener('click', () => {
+          if (rig.components.origin && typeof rig.components.origin.recenter === 'function') {
+            rig.components.origin.recenter();
+            originStatus.setAttribute('value', 'origin: recentered');
+          }
+        });
+      }
+
+      const rayInteractorDemo = document.getElementById('ray-interactor-demo');
+      const rayTargetDemo = document.getElementById('ray-target-demo');
+      const rayPressBtn = document.getElementById('ray-press-btn');
+      const rayReleaseBtn = document.getElementById('ray-release-btn');
+      const rayUseBtn = document.getElementById('ray-use-btn');
+      const rayStatus = document.getElementById('ray-status-label');
+      if (rayInteractorDemo) {
+        if (rayPressBtn) rayPressBtn.addEventListener('click', () => rayInteractorDemo.emit('triggerdown'));
+        if (rayReleaseBtn) rayReleaseBtn.addEventListener('click', () => rayInteractorDemo.emit('triggerup'));
+        if (rayUseBtn) rayUseBtn.addEventListener('click', () => rayInteractorDemo.emit('abuttondown'));
+      }
+      if (rayTargetDemo && rayStatus) {
+        rayTargetDemo.addEventListener('xr:interact-press', () => {
+          rayStatus.setAttribute('value', 'target: press');
+        });
+        rayTargetDemo.addEventListener('xr:interact-release', () => {
+          rayStatus.setAttribute('value', 'target: release');
+        });
+        rayTargetDemo.addEventListener('xr:interact-use', () => {
+          rayStatus.setAttribute('value', 'target: use');
+        });
+      }
+
+      const rigidBodyDemo = document.getElementById('rigid-demo-body');
+      const rigidPushUpBtn = document.getElementById('rigid-push-up-btn');
+      const rigidPushSideBtn = document.getElementById('rigid-push-side-btn');
+      const rigidResetBtn = document.getElementById('rigid-reset-btn');
+      const rigidStatus = document.getElementById('rigid-status-label');
+      if (rigidBodyDemo && rigidStatus) {
+        if (rigidPushUpBtn) {
+          rigidPushUpBtn.addEventListener('click', () => {
+            rigidBodyDemo.emit('xr:physics-impulse', { impulse: { x: 0, y: 5.5, z: 0 } });
+            rigidStatus.setAttribute('value', 'body: impulse up');
+          });
+        }
+        if (rigidPushSideBtn) {
+          rigidPushSideBtn.addEventListener('click', () => {
+            rigidBodyDemo.emit('xr:physics-impulse', { impulse: { x: 2.8, y: 2.2, z: -1.8 } });
+            rigidStatus.setAttribute('value', 'body: impulse side');
+          });
+        }
+        if (rigidResetBtn) {
+          rigidResetBtn.addEventListener('click', () => {
+            rigidBodyDemo.object3D.position.set(14, 3, 224);
+            const rb = rigidBodyDemo.components['rigid-body'];
+            if (rb?.velocity) rb.velocity.set(0, 0, 0);
+            rigidStatus.setAttribute('value', 'body: reset');
+          });
+        }
+
+        rigidBodyDemo.addEventListener('xr:physics-ground-contact', () => {
+          rigidStatus.setAttribute('value', 'body: ground contact');
+        });
+      }
+
+      const sSaveBox = document.getElementById('s-save-box');
+      const sSaveProfile = document.getElementById('s-save-profile');
+      const sStateNextBtn = document.getElementById('s-state-next-btn');
+      const sSaveBtn = document.getElementById('s-save-btn');
+      const sLoadBtn = document.getElementById('s-load-btn');
+      const sClearBtn = document.getElementById('s-clear-btn');
+      const sSaveStatus = document.getElementById('s-save-status');
+      const sStates = ['idle', 'armed', 'active'];
+      let sStateIndex = 0;
+      if (sSaveBox && sSaveStatus) {
+        sSaveBox.addEventListener('xr:state-changed', (e) => {
+          const to = e?.detail?.to || sStates[sStateIndex];
+          sSaveStatus.setAttribute('value', `profile state: ${to}`);
+          if (to === 'idle') sSaveBox.setAttribute('material', 'color: #6699ff');
+          if (to === 'armed') sSaveBox.setAttribute('material', 'color: #ffaa44');
+          if (to === 'active') sSaveBox.setAttribute('material', 'color: #66dd88');
+        });
+      }
+      if (sStateNextBtn && sSaveBox) {
+        sStateNextBtn.addEventListener('click', () => {
+          sStateIndex = (sStateIndex + 1) % sStates.length;
+          sSaveBox.emit('xr:set-state', { state: sStates[sStateIndex], source: sStateNextBtn });
+        });
+      }
+      if (sSaveBtn && sSaveProfile) {
+        sSaveBtn.addEventListener('click', () => sSaveProfile.emit('xr:save-game'));
+      }
+      if (sLoadBtn && sSaveProfile) {
+        sLoadBtn.addEventListener('click', () => sSaveProfile.emit('xr:load-game'));
+      }
+      if (sClearBtn && sSaveProfile) {
+        sClearBtn.addEventListener('click', () => sSaveProfile.emit('xr:clear-game'));
+      }
+      if (sSaveProfile && sSaveStatus) {
+        sSaveProfile.addEventListener('xr:save-game-complete', (e) => {
+          sSaveStatus.setAttribute('value', `profile: saved (${e.detail.count})`);
+        });
+        sSaveProfile.addEventListener('xr:save-game-loaded', (e) => {
+          sSaveStatus.setAttribute('value', `profile: loaded (${e.detail.loaded})`);
+        });
+        sSaveProfile.addEventListener('xr:save-game-cleared', () => {
+          sSaveStatus.setAttribute('value', 'profile: cleared');
+        });
+      }
+
+      const sShooter = document.getElementById('s-shooter');
+      const sShootBtn = document.getElementById('s-shoot-btn');
+      const sScoreResetBtn = document.getElementById('s-score-reset-btn');
+      const sShooterTarget = document.getElementById('s-shooter-target');
+      if (sShootBtn && sShooter) {
+        sShootBtn.addEventListener('click', () => sShooter.emit('shoot'));
+      }
+      if (sScoreResetBtn) {
+        sScoreResetBtn.addEventListener('click', () => {
+          const scoreSystem = sScoreResetBtn.sceneEl?.systems?.score;
+          if (scoreSystem) scoreSystem.reset(sScoreResetBtn);
+        });
+      }
+      if (sShooterTarget) {
+        sShooterTarget.addEventListener('xr:target-damaged', () => {
+          sShooterTarget.setAttribute('material', 'color: #ff7744');
+        });
+        sShooterTarget.addEventListener('xr:target-destroyed', () => {
+          sShooterTarget.setAttribute('material', 'color: #66ff88');
+          setTimeout(() => {
+            const tgt = sShooterTarget.components.target;
+            if (!tgt) return;
+            tgt.healthPoints = 20;
+            sShooterTarget.setAttribute('material', 'color: #ffaa44');
+          }, 500);
+        });
+      }
+
+      const sSmoothMoveProxy = document.getElementById('s-smooth-move-proxy');
+      const sSmoothTurnProxy = document.getElementById('s-smooth-turn-proxy');
+      const sSnapTurnProxy = document.getElementById('s-snap-turn-proxy');
+      const sMoveForwardBtn = document.getElementById('s-move-forward-btn');
+      const sTurnLeftBtn = document.getElementById('s-turn-left-btn');
+      const sTurnRightBtn = document.getElementById('s-turn-right-btn');
+      const sSnapLeftBtn = document.getElementById('s-snap-left-btn');
+      const sSnapRightBtn = document.getElementById('s-snap-right-btn');
+      const sLocomotionStatus = document.getElementById('s-locomotion-status');
+      if (sMoveForwardBtn && sSmoothMoveProxy) {
+        sMoveForwardBtn.addEventListener('click', () => {
+          sSmoothMoveProxy.emit('thumbstickmoved', { x: 0, y: -1 });
+          if (sLocomotionStatus) sLocomotionStatus.setAttribute('value', 'locomotion: smooth forward');
+          setTimeout(() => sSmoothMoveProxy.emit('thumbstickmoved', { x: 0, y: 0 }), 120);
+        });
+      }
+      if (sTurnLeftBtn && sSmoothTurnProxy) {
+        sTurnLeftBtn.addEventListener('click', () => {
+          sSmoothTurnProxy.emit('thumbstickmoved', { x: -1, y: 0 });
+          if (sLocomotionStatus) sLocomotionStatus.setAttribute('value', 'locomotion: smooth left');
+          setTimeout(() => sSmoothTurnProxy.emit('thumbstickmoved', { x: 0, y: 0 }), 120);
+        });
+      }
+      if (sTurnRightBtn && sSmoothTurnProxy) {
+        sTurnRightBtn.addEventListener('click', () => {
+          sSmoothTurnProxy.emit('thumbstickmoved', { x: 1, y: 0 });
+          if (sLocomotionStatus) sLocomotionStatus.setAttribute('value', 'locomotion: smooth right');
+          setTimeout(() => sSmoothTurnProxy.emit('thumbstickmoved', { x: 0, y: 0 }), 120);
+        });
+      }
+      if (sSnapLeftBtn && sSnapTurnProxy) {
+        sSnapLeftBtn.addEventListener('click', () => {
+          sSnapTurnProxy.emit('thumbstickmoved', { x: -1, y: 0 });
+          if (sLocomotionStatus) sLocomotionStatus.setAttribute('value', 'locomotion: snap left');
+          setTimeout(() => sSnapTurnProxy.emit('thumbstickmoved', { x: 0, y: 0 }), 220);
+        });
+      }
+      if (sSnapRightBtn && sSnapTurnProxy) {
+        sSnapRightBtn.addEventListener('click', () => {
+          sSnapTurnProxy.emit('thumbstickmoved', { x: 1, y: 0 });
+          if (sLocomotionStatus) sLocomotionStatus.setAttribute('value', 'locomotion: snap right');
+          setTimeout(() => sSnapTurnProxy.emit('thumbstickmoved', { x: 0, y: 0 }), 220);
+        });
+      }
+
+      const sSnapZone = document.getElementById('s-snap-zone');
+      const sSnappableItem = document.getElementById('s-snappable-item');
+      const sSoftbodyDemo = document.getElementById('s-softbody-demo');
+      const sSpawner = document.getElementById('s-spawner');
+      const sSnapBtn = document.getElementById('s-snap-btn');
+      const sSoftbodyHitBtn = document.getElementById('s-softbody-hit-btn');
+      const sSpawnBtn = document.getElementById('s-spawn-btn');
+      const sSnapSpawnStatus = document.getElementById('s-snap-spawn-status');
+      if (sSnapBtn && sSnapZone && sSnappableItem) {
+        sSnapBtn.addEventListener('click', () => {
+          sSnapZone.emit('xr:snap-attempt', { item: sSnappableItem });
+        });
+      }
+      if (sSoftbodyHitBtn && sSoftbodyDemo) {
+        sSoftbodyHitBtn.addEventListener('click', () => {
+          sSoftbodyDemo.emit('xr:physics-impulse', { impulse: { x: 0.2, y: 1.2, z: 0 } });
+        });
+      }
+      if (sSpawnBtn && sSpawner) {
+        sSpawnBtn.addEventListener('click', () => sSpawner.emit('xr:spawn'));
+      }
+      if (sSnapZone && sSnapSpawnStatus) {
+        sSnapZone.addEventListener('xr:snap-zone-snapped', () => {
+          sSnapSpawnStatus.setAttribute('value', 'snap/spawn: snapped');
+        });
+      }
+      if (sSpawner && sSnapSpawnStatus) {
+        sSpawner.addEventListener('xr:spawner-spawned', (e) => {
+          sSnapSpawnStatus.setAttribute('value', `snap/spawn: alive ${e.detail.alive}`);
+        });
+      }
+
+      const sEffectTarget = document.getElementById('s-effect-target');
+      const sEffectBurnBtn = document.getElementById('s-effect-burn-btn');
+      const sEffectClearBtn = document.getElementById('s-effect-clear-btn');
+      const sStateNext2Btn = document.getElementById('s-state-next2-btn');
+      const sKbToggleBtn = document.getElementById('s-kb-toggle-btn');
+      const sSuperKb = document.getElementById('s-super-kb');
+      const sEffectStatus = document.getElementById('s-effect-status');
+      let sKbVisible = false;
+      let sStateIndex2 = 0;
+      if (sEffectBurnBtn && sEffectTarget) {
+        sEffectBurnBtn.addEventListener('click', () => {
+          sEffectTarget.emit('xr:effect-apply', { effect: { type: 'burn', power: 2, durationMs: 3000 } });
+        });
+      }
+      if (sEffectClearBtn && sEffectTarget) {
+        sEffectClearBtn.addEventListener('click', () => sEffectTarget.emit('xr:effect-clear', {}));
+      }
+      if (sStateNext2Btn && sEffectTarget) {
+        sStateNext2Btn.addEventListener('click', () => {
+          sStateIndex2 = (sStateIndex2 + 1) % sStates.length;
+          sEffectTarget.emit('xr:set-state', { state: sStates[sStateIndex2], source: sStateNext2Btn });
+        });
+      }
+      if (sKbToggleBtn && sSuperKb) {
+        sKbToggleBtn.addEventListener('click', () => {
+          sKbVisible = !sKbVisible;
+          sSuperKb.setAttribute('super-keyboard', 'show', sKbVisible);
+        });
+      }
+      if (sEffectTarget && sEffectStatus) {
+        const updateStatus = () => {
+          const state = sEffectTarget.getAttribute('data-state') || 'idle';
+          const effects = sEffectTarget.components['status-effects']?.effects;
+          const names = effects ? Array.from(effects.keys()) : [];
+          const fxText = names.length ? names.join(',') : 'none';
+          sEffectStatus.setAttribute('value', `state: ${state} | fx: ${fxText}`);
+        };
+        sEffectTarget.addEventListener('xr:effects-changed', updateStatus);
+        sEffectTarget.addEventListener('xr:state-changed', updateStatus);
+        updateStatus();
+      }
+
+      const tShooter = document.getElementById('t-shooter');
+      const tShootBtn = document.getElementById('t-shoot-btn');
+      const tTargetDemo = document.getElementById('t-target-demo');
+      const tTargetStatus = document.getElementById('t-target-status');
+      if (tShootBtn && tShooter) {
+        tShootBtn.addEventListener('click', () => tShooter.emit('shoot'));
+      }
+      if (tTargetDemo && tTargetStatus) {
+        tTargetDemo.addEventListener('xr:target-damaged', (e) => {
+          const hp = Math.max(0, Math.round(e?.detail?.healthPoints ?? 0));
+          tTargetStatus.setAttribute('value', `target hp: ${hp}`);
+          tTargetDemo.setAttribute('material', 'color: #ff7744');
+        });
+        tTargetDemo.addEventListener('xr:target-destroyed', () => {
+          tTargetStatus.setAttribute('value', 'target hp: 0 (respawn)');
+          tTargetDemo.setAttribute('material', 'color: #66ff88');
+          setTimeout(() => {
+            const targetComp = tTargetDemo.components.target;
+            if (!targetComp) return;
+            targetComp.healthPoints = 24;
+            tTargetDemo.setAttribute('material', 'color: #ffaa44');
+            tTargetStatus.setAttribute('value', 'target hp: 24');
+          }, 650);
+        });
+      }
+
+      const tTeleportProbe = document.getElementById('t-teleport-probe');
+      const tTeleportBtn = document.getElementById('t-teleport-btn');
+      const tTeleportStatus = document.getElementById('t-teleport-status');
+      if (tTeleportBtn && tTeleportProbe) {
+        tTeleportBtn.addEventListener('click', () => tTeleportProbe.emit('xr:teleport-now'));
+      }
+      if (tTeleportProbe && tTeleportStatus) {
+        tTeleportProbe.addEventListener('xr:teleport-complete', (e) => {
+          const x = Number(e?.detail?.x || 0).toFixed(1);
+          const z = Number(e?.detail?.z || 0).toFixed(1);
+          tTeleportStatus.setAttribute('value', `teleport: x ${x}, z ${z}`);
+        });
+      }
+
+      const tTimedSpawner = document.getElementById('t-timed-spawner');
+      const tSpawnOnceBtn = document.getElementById('t-spawn-once-btn');
+      const tSpawnClearBtn = document.getElementById('t-spawn-clear-btn');
+      const tSpawnStatus = document.getElementById('t-spawn-status');
+      if (tSpawnOnceBtn && tTimedSpawner) {
+        tSpawnOnceBtn.addEventListener('click', () => {
+          const comp = tTimedSpawner.components['timed-spawner'];
+          if (comp && typeof comp.spawnNow === 'function') comp.spawnNow();
+        });
+      }
+      if (tSpawnClearBtn && tTimedSpawner) {
+        tSpawnClearBtn.addEventListener('click', () => {
+          const parent = tTimedSpawner.sceneEl;
+          if (!parent) return;
+          const spawned = parent.querySelectorAll('.t-spawned');
+          for (let i = 0; i < spawned.length; i++) {
+            if (spawned[i].id === 't-spawn-prefab') continue;
+            spawned[i].parentNode?.removeChild(spawned[i]);
+          }
+          if (tSpawnStatus) tSpawnStatus.setAttribute('value', 'spawned: 0');
+        });
+      }
+      if (tTimedSpawner && tSpawnStatus) {
+        tTimedSpawner.addEventListener('xr:spawned', (e) => {
+          tSpawnStatus.setAttribute('value', `spawned: ${e?.detail?.count ?? 0}`);
+        });
+      }
+
+      const uPanelDemo = document.getElementById('u-panel-demo');
+      const uLabelDemo = document.getElementById('u-label-demo');
+      const uPanelToggleBtn = document.getElementById('u-panel-toggle-btn');
+      const uLabelToggleBtn = document.getElementById('u-label-toggle-btn');
+      const uOverlayStatus = document.getElementById('u-overlay-status');
+      let uPanelVisible = true;
+      let uLabelVisible = true;
+      const refreshUOverlayStatus = () => {
+        if (!uOverlayStatus) return;
+        const panelState = uPanelVisible ? 'panel on' : 'panel off';
+        const labelState = uLabelVisible ? 'label on' : 'label off';
+        uOverlayStatus.setAttribute('value', `overlay ui: ${panelState}, ${labelState}`);
+      };
+      if (uPanelToggleBtn && uPanelDemo) {
+        uPanelToggleBtn.addEventListener('click', () => {
+          uPanelVisible = !uPanelVisible;
+          uPanelDemo.setAttribute('ui-panel', 'visible', uPanelVisible);
+          refreshUOverlayStatus();
+        });
+      }
+      if (uLabelToggleBtn && uLabelDemo) {
+        uLabelToggleBtn.addEventListener('click', () => {
+          uLabelVisible = !uLabelVisible;
+          uLabelDemo.setAttribute('ui-label', 'visible', uLabelVisible);
+          refreshUOverlayStatus();
+        });
+      }
+      refreshUOverlayStatus();
+
+      const uBarHealthTarget = document.getElementById('u-bar-health-target');
+      const uBarDmgBtn = document.getElementById('u-bar-dmg-btn');
+      const uBarHealBtn = document.getElementById('u-bar-heal-btn');
+      const uBarStatus = document.getElementById('u-bar-status');
+      if (uBarHealthTarget && uBarStatus) {
+        uBarHealthTarget.addEventListener('xr:health-changed', (e) => {
+          const hp = Math.max(0, Math.round(e?.detail?.current ?? 0));
+          uBarStatus.setAttribute('value', `hp: ${hp}`);
+        });
+      }
+      if (uBarDmgBtn && uBarHealthTarget) {
+        uBarDmgBtn.addEventListener('click', () => {
+          uBarHealthTarget.emit('damage', { amount: 12 });
+        });
+      }
+      if (uBarHealBtn && uBarHealthTarget) {
+        uBarHealBtn.addEventListener('click', () => {
+          uBarHealthTarget.emit('heal', { amount: 12 });
+        });
+      }
+
+      const uMenuDemo = document.getElementById('u-menu-demo');
+      const uMenuTarget = document.getElementById('u-menu-target');
+      const uMenuToggleBtn = document.getElementById('u-menu-toggle-btn');
+      const uMenuStatus = document.getElementById('u-menu-status');
+      let uMenuVisible = true;
+      if (uMenuToggleBtn && uMenuDemo) {
+        uMenuToggleBtn.addEventListener('click', () => {
+          uMenuVisible = !uMenuVisible;
+          uMenuDemo.setAttribute('ui-menu', 'visible', uMenuVisible);
+          if (uMenuStatus) uMenuStatus.setAttribute('value', `menu: ${uMenuVisible ? 'visible' : 'hidden'}`);
+        });
+      }
+      if (uMenuTarget && uMenuStatus && uBarHealthTarget) {
+        uMenuTarget.addEventListener('xr:u-menu', (e) => {
+          const value = e?.detail?.value || '';
+          uMenuStatus.setAttribute('value', `menu: ${value}`);
+          if (value === 'Alert') {
+            uLabelDemo?.setAttribute('ui-label', 'text', 'status: alert');
+            uBarHealthTarget.emit('damage', { amount: 8 });
+          }
+          if (value === 'Reset') {
+            uLabelDemo?.setAttribute('ui-label', 'text', 'status: online');
+            uBarHealthTarget.emit('heal', { amount: 100 });
+          }
+          if (value === 'Start') {
+            uLabelDemo?.setAttribute('ui-label', 'text', 'status: mission start');
+          }
+        });
+      }
+
+      const vignetteToggleBtn = document.getElementById('vignette-toggle-btn');
+      const vignetteMoreBtn = document.getElementById('vignette-more-btn');
+      const vignetteLessBtn = document.getElementById('vignette-less-btn');
+      const vignetteRadiusBtn = document.getElementById('vignette-radius-btn');
+      const vignetteStatus = document.getElementById('vignette-status');
+      const activeCamera = document.querySelector('[camera]') || document.querySelector('a-camera');
+      const radiusModes = [0.95, 0.85, 0.75];
+      let radiusIndex = 0;
+
+      const applyVignette = (next) => {
+        if (!activeCamera) return;
+        activeCamera.setAttribute('vignette', next);
+        const data = activeCamera.getAttribute('vignette');
+        if (!vignetteStatus || !data) return;
+        const opacity = Number(data.opacity || 0).toFixed(2);
+        const radius = Number(data.radius || 0).toFixed(2);
+        vignetteStatus.setAttribute('value', `vignette: on | op ${opacity} | r ${radius}`);
+      };
+
+      if (vignetteToggleBtn && activeCamera) {
+        vignetteToggleBtn.addEventListener('click', () => {
+          const enabled = !!activeCamera.components.vignette;
+          if (enabled) {
+            activeCamera.removeAttribute('vignette');
+            if (vignetteStatus) vignetteStatus.setAttribute('value', 'vignette: off');
+          } else {
+            applyVignette('color: #000000; opacity: 0.55; radius: 0.85; innerRadius: 0.2; distance: 0.12');
+          }
+        });
+      }
+
+      if (vignetteMoreBtn && activeCamera) {
+        vignetteMoreBtn.addEventListener('click', () => {
+          if (!activeCamera.components.vignette) {
+            applyVignette('color: #000000; opacity: 0.55; radius: 0.85; innerRadius: 0.2; distance: 0.12');
+            return;
+          }
+          const cur = activeCamera.getAttribute('vignette') || {};
+          const nextOpacity = Math.min(1, Number(cur.opacity || 0) + 0.1);
+          applyVignette(`color: ${cur.color || '#000000'}; opacity: ${nextOpacity}; radius: ${cur.radius || 0.85}; innerRadius: ${cur.innerRadius || 0.2}; distance: ${cur.distance || 0.12}`);
+        });
+      }
+
+      if (vignetteLessBtn && activeCamera) {
+        vignetteLessBtn.addEventListener('click', () => {
+          if (!activeCamera.components.vignette) return;
+          const cur = activeCamera.getAttribute('vignette') || {};
+          const nextOpacity = Math.max(0.1, Number(cur.opacity || 0) - 0.1);
+          applyVignette(`color: ${cur.color || '#000000'}; opacity: ${nextOpacity}; radius: ${cur.radius || 0.85}; innerRadius: ${cur.innerRadius || 0.2}; distance: ${cur.distance || 0.12}`);
+        });
+      }
+
+      if (vignetteRadiusBtn && activeCamera) {
+        vignetteRadiusBtn.addEventListener('click', () => {
+          if (!activeCamera.components.vignette) {
+            applyVignette('color: #000000; opacity: 0.55; radius: 0.85; innerRadius: 0.2; distance: 0.12');
+            return;
+          }
+          radiusIndex = (radiusIndex + 1) % radiusModes.length;
+          const cur = activeCamera.getAttribute('vignette') || {};
+          const nextRadius = radiusModes[radiusIndex];
+          const nextInner = Math.max(0.1, nextRadius - 0.65);
+          applyVignette(`color: ${cur.color || '#000000'}; opacity: ${cur.opacity || 0.55}; radius: ${nextRadius}; innerRadius: ${nextInner}; distance: ${cur.distance || 0.12}`);
+        });
+      }
+
+      const wForwardBtn = document.getElementById('w-forward-btn');
+      const wLeftBtn = document.getElementById('w-left-btn');
+      const wRightBtn = document.getElementById('w-right-btn');
+      const wWasdStatus = document.getElementById('w-wasd-status');
+      const pressKeyFor = (code, ms = 140) => {
+        document.dispatchEvent(new KeyboardEvent('keydown', { code }));
+        setTimeout(() => document.dispatchEvent(new KeyboardEvent('keyup', { code })), ms);
+      };
+      if (wForwardBtn) {
+        wForwardBtn.addEventListener('click', () => {
+          pressKeyFor('KeyW');
+          if (wWasdStatus) wWasdStatus.setAttribute('value', 'wasd: forward pulse');
+        });
+      }
+      if (wLeftBtn) {
+        wLeftBtn.addEventListener('click', () => {
+          pressKeyFor('KeyA');
+          if (wWasdStatus) wWasdStatus.setAttribute('value', 'wasd: left pulse');
+        });
+      }
+      if (wRightBtn) {
+        wRightBtn.addEventListener('click', () => {
+          pressKeyFor('KeyD');
+          if (wWasdStatus) wWasdStatus.setAttribute('value', 'wasd: right pulse');
+        });
+      }
+
+      const wWeapon = document.getElementById('w-weapon');
+      const wWeaponTarget = document.getElementById('w-weapon-target');
+      const wFireBtn = document.getElementById('w-fire-btn');
+      const wReloadBtn = document.getElementById('w-reload-btn');
+      const wAmmoStatus = document.getElementById('w-ammo-status');
+      const updateWAmmo = () => {
+        if (!wWeapon || !wAmmoStatus) return;
+        const ammo = wWeapon.getAttribute('ammo');
+        if (!ammo) return;
+        const loading = wWeapon.components.ammo?.reloading ? ' (reloading)' : '';
+        wAmmoStatus.setAttribute('value', `ammo: ${ammo.clip} / ${ammo.reserve}${loading}`);
+      };
+      if (wFireBtn && wWeapon) {
+        wFireBtn.addEventListener('click', () => wWeapon.emit('xr:w-fire'));
+      }
+      if (wReloadBtn && wWeapon) {
+        wReloadBtn.addEventListener('click', () => wWeapon.emit('xr:weapon-reload'));
+      }
+      if (wWeapon) {
+        wWeapon.addEventListener('xr:w-action', (e) => {
+          if (wWeaponTarget) {
+            wWeaponTarget.emit('damage', { amount: e?.detail?.damage || 8, source: wWeapon });
+          }
+          updateWAmmo();
+        });
+        wWeapon.addEventListener('xr:ammo-changed', updateWAmmo);
+        wWeapon.addEventListener('xr:ammo-reload-start', updateWAmmo);
+        wWeapon.addEventListener('xr:ammo-reload-complete', updateWAmmo);
+        updateWAmmo();
+      }
+
+      const wWorldDemo = document.getElementById('w-world-demo');
+      const wPlatforms = document.getElementById('w-platforms');
+      const wScatter = document.getElementById('w-scatter');
+      const wWorldGrabProxy = document.getElementById('w-world-grab-proxy');
+      const wRebuildWorldBtn = document.getElementById('w-rebuild-world-btn');
+      const wWorldGrabBtn = document.getElementById('w-world-grab-btn');
+      const wWorldStatus = document.getElementById('w-world-status');
+      if (wRebuildWorldBtn && wPlatforms && wScatter) {
+        wRebuildWorldBtn.addEventListener('click', () => {
+          wPlatforms.setAttribute('world-platforms', 'color', `#${Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0')}`);
+          wScatter.setAttribute('world-scatter', 'count', 6 + Math.floor(Math.random() * 8));
+          if (wWorldStatus) wWorldStatus.setAttribute('value', 'world: rebuilt');
+        });
+      }
+      if (wWorldGrabBtn && wWorldGrabProxy && wWorldDemo) {
+        wWorldGrabBtn.addEventListener('click', () => {
+          wWorldGrabProxy.emit('xr:w-grab-start');
+          const startX = wWorldGrabProxy.object3D.position.x;
+          let step = 0;
+          const timer = setInterval(() => {
+            step += 1;
+            wWorldGrabProxy.object3D.position.x = startX + (step * 0.045);
+            if (step >= 6) {
+              clearInterval(timer);
+              wWorldGrabProxy.emit('xr:w-grab-end');
+              wWorldGrabProxy.object3D.position.x = startX;
+            }
+          }, 35);
+        });
+      }
+      if (wWorldGrabProxy && wWorldStatus) {
+        wWorldGrabProxy.addEventListener('xr:world-grab-start', () => {
+          wWorldStatus.setAttribute('value', 'world: grab start');
+        });
+        wWorldGrabProxy.addEventListener('xr:world-grab-end', () => {
+          wWorldStatus.setAttribute('value', 'world: grab end');
+        });
+      }
+      if (wWorldDemo && wWorldStatus) {
+        wWorldDemo.addEventListener('xr:world-platforms-built', (e) => {
+          wWorldStatus.setAttribute('value', `world: platforms ${e?.detail?.count ?? 0}`);
+        });
+      }
+
+      const zZoneBox = document.getElementById('z-zone-box');
+      const zProbe = document.getElementById('z-probe');
+      const zEnterBtn = document.getElementById('z-enter-btn');
+      const zExitBtn = document.getElementById('z-exit-btn');
+      const zResetBtn = document.getElementById('z-reset-btn');
+      const zStatus = document.getElementById('z-status');
+      if (zEnterBtn && zProbe && zStatus) {
+        zEnterBtn.addEventListener('click', () => {
+          zProbe.object3D.position.set(0, 1.5, 308);
+          zStatus.setAttribute('value', 'zone: probe moved inside');
+        });
+      }
+      if (zExitBtn && zProbe && zStatus) {
+        zExitBtn.addEventListener('click', () => {
+          zProbe.object3D.position.set(-3, 1.5, 308);
+          zStatus.setAttribute('value', 'zone: probe moved outside');
+        });
+      }
+      if (zResetBtn && zProbe && zStatus) {
+        zResetBtn.addEventListener('click', () => {
+          zProbe.object3D.position.set(-3, 1.5, 308);
+          zStatus.setAttribute('value', 'zone: reset');
+        });
+      }
+      if (zZoneBox && zStatus) {
+        zZoneBox.addEventListener('xr:z-enter', () => {
+          zStatus.setAttribute('value', 'zone: enter');
+          zZoneBox.setAttribute('material', 'color: #44dd88; opacity: 0.24; transparent: true');
+        });
+        zZoneBox.addEventListener('xr:z-exit', () => {
+          zStatus.setAttribute('value', 'zone: exit');
+          zZoneBox.setAttribute('material', 'color: #55aaff; opacity: 0.18; transparent: true');
+        });
+        zZoneBox.addEventListener('xr:z-stay', () => {
+          if (zStatus.getAttribute('value') !== 'zone: stay') {
+            zStatus.setAttribute('value', 'zone: stay');
+          }
+        });
+      }
+
+      const tp = document.getElementById('checkpoint-tp');
+      const bulletShooter = document.getElementById('bullet-shooter');
+      const bulletStatus = document.getElementById('bullet-status');
+      const areaStatus = document.getElementById('area-status');
+      const areaZones = Array.from(document.querySelectorAll('[area]'));
+
+      if (areaStatus && areaZones.length > 0) {
+        areaZones.forEach((zone, idx) => {
+          zone.addEventListener('xr:area-enter', () => {
+            areaStatus.setAttribute('value', `area: entered zone ${idx + 1}`);
+          });
+          zone.addEventListener('xr:area-exit', () => {
+            areaStatus.setAttribute('value', `area: exited zone ${idx + 1}`);
+          });
+        });
+      }
+
+      if (bulletShooter) {
+        bulletShooter.addEventListener('click', () => {
+          bulletShooter.emit('shoot');
+        });
+        bulletShooter.addEventListener('xr:shoot-fired', () => {
+          if (bulletStatus) bulletStatus.setAttribute('value', 'bullet: fired');
+        });
+      }
+
+      ['bullet-target-box', 'bullet-target-sphere', 'bullet-target-cylinder'].forEach((id) => {
+        const targetEl = document.getElementById(id);
+        if (!targetEl) return;
+        targetEl.addEventListener('xr:target-hit', () => {
+          if (bulletStatus) bulletStatus.setAttribute('value', `bullet: hit ${id.replace('bullet-target-', '')}`);
+        });
+      });
+
+      if (tp && rig) {
+        tp.addEventListener('click', () => {
+          const sys = tp.sceneEl.systems.checkpoint;
+          const cp = sys && sys.getActive('test');
+          if (!cp) return;
+
+          const worldPos = new THREE.Vector3();
+          cp.object3D.getWorldPosition(worldPos);
+          if (rig.object3D.parent) rig.object3D.parent.worldToLocal(worldPos);
+          rig.object3D.position.copy(worldPos);
+        });
+      }
+    });
+  </script>
 </body>
 
 </html>

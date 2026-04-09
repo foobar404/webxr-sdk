@@ -10,7 +10,8 @@ AFRAME.registerComponent('confetti', {
         sourceHeight: { default: 3 },
         wavesNumber: { default: 50 },
         waveSize: { default: 50 },
-        waveSeparation: { default: 10 }
+        waveSeparation: { default: 10 },
+        waveDelay: { default: 1000 }
     },
 
     init: function () {
@@ -21,7 +22,7 @@ AFRAME.registerComponent('confetti', {
         var j;
         var confettiEls = this.confettiEls = [];
         var color;
-        var conffetiEl;
+        var confettiEl;
         var colors = ['red', 'blue', 'green'];
         var redConfettiEl = this.redConfettiEl = document.createElement('a-entity');
         var blueConfettiEl = this.blueConfettiEl = document.createElement('a-entity');
@@ -44,7 +45,7 @@ AFRAME.registerComponent('confetti', {
         confettiContainerEl.appendChild(greenConfettiEl);
         for (i = 0; i < data.wavesNumber; ++i) {
             for (j = 0; j < data.waveSize; ++j) {
-                color = colors[Math.round(Math.random() * colors.length)];
+                color = colors[Math.floor(Math.random() * colors.length)];
                 confettiEl = document.createElement('a-entity');
                 confettiEl.setAttribute('material', {
                     color: color,
@@ -69,6 +70,13 @@ AFRAME.registerComponent('confetti', {
         }
         this.flyingConfettiEls = [];
         this.waveInterval = setInterval(this.createConfettiWave.bind(this), data.waveDelay);
+    },
+
+    remove: function () {
+        if (this.waveInterval) {
+            clearInterval(this.waveInterval);
+            this.waveInterval = 0;
+        }
     },
 
     createConfettiWave: function () {

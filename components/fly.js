@@ -1,11 +1,13 @@
+import { applyDeadzone, coerceAxisEvent, emitXrEvent, listenForRigReady } from './core-utils.js';
+
 window.AFRAME.registerComponent('fly', {
     schema: {
         enabled: { type: 'boolean', default: true },
         flySpeed: { type: 'number', default: 2 },
         turnSpeed: { type: 'number', default: .5 },
         strafeTurning: { type: 'boolean', default: false },
-        accelerateEvent: { type: 'string', default: null },
-        ascendEvent: { type: 'string', default: null }
+        accelerateEvent: { type: 'string', default: '' },
+        ascendEvent: { type: 'string', default: '' }
     },
 
     init: function () {
@@ -31,17 +33,30 @@ window.AFRAME.registerComponent('fly', {
 
         // Movement vectors
         this.vector = new THREE.Vector3();
+        this.right = new THREE.Vector3();
+        this.up = new THREE.Vector3(0, 1, 0);
+        this.verticalMove = new THREE.Vector3();
 
-        // Set up delayed initialization
-        setTimeout(() => {
+        this._onThumbstickMoved = this.onJoystickMoved.bind(this);
+        this._onThumbstickDown = this.onJoystickClick.bind(this);
+        this._onTriggerChanged = this.onTriggerChanged.bind(this);
+        this._onGripChanged = this.onGripChanged.bind(this);
+
+        this._stopRigReadyListener = listenForRigReady(this, () => {
             this.findCamera();
-            this.bindEvents();
-        }, 1000);
+        });
+
+        this.bindEvents();
     },
 
     findCamera: function () {
-        // Look for active camera in the scene
-        this.camera = this.el.sceneEl.camera.el;
+        const scene = this.el.sceneEl;
+        if (!scene) return;
+
+        // Prefer active camera, fallback to camera query.
+        this.camera = scene.camera && scene.camera.el
+            ? scene.camera.el
+            : (scene.querySelector('[camera]') || scene.querySelector('a-camera'));
 
         if (this.camera) {
             // Get the camera's parent (should be the camera rig)
@@ -53,26 +68,35 @@ window.AFRAME.registerComponent('fly', {
 
     bindEvents: function () {
         // Only bind to this controller (this.el)
-        this.el.addEventListener('thumbstickmoved', this.onJoystickMoved.bind(this));
-        this.el.addEventListener('thumbstickdown', this.onJoystickClick.bind(this));
+        this.el.addEventListener('thumbstickmoved', this._onThumbstickMoved);
+        this.el.addEventListener('thumbstickdown', this._onThumbstickDown);
 
-        if (this.data.accelerateEvent) this.el.addEventListener(this.data.accelerateEvent, this.onTriggerChanged.bind(this));
-        if (this.data.ascendEvent) this.el.addEventListener(this.data.ascendEvent, this.onGripChanged.bind(this));
+        if (this.data.accelerateEvent) this.el.addEventListener(this.data.accelerateEvent, this._onTriggerChanged);
+        if (this.data.ascendEvent) this.el.addEventListener(this.data.ascendEvent, this._onGripChanged);
+    },
+
+    remove: function () {
+        this.el.removeEventListener('thumbstickmoved', this._onThumbstickMoved);
+        this.el.removeEventListener('thumbstickdown', this._onThumbstickDown);
+        if (this.data.accelerateEvent) this.el.removeEventListener(this.data.accelerateEvent, this._onTriggerChanged);
+        if (this.data.ascendEvent) this.el.removeEventListener(this.data.ascendEvent, this._onGripChanged);
+        if (this._stopRigReadyListener) this._stopRigReadyListener();
     },
 
     // Controller joystick - forward/backward movement and turning/strafing
     onJoystickMoved: function (evt) {
         if (!this.data.enabled) return;
 
-        const x = evt.detail.x; // X-axis for turning or strafing
-        const y = evt.detail.y; // Y-axis for forward/backward
+        const axis = coerceAxisEvent(evt.detail);
+        const x = axis.x; // X-axis for turning or strafing
+        const y = axis.y; // Y-axis for forward/backward
         const deadzone = 0.1;
 
         // Reset movement
         this.resetMovement();
 
         // Forward/backward movement (Y-axis)
-        if (Math.abs(y) > deadzone) {
+        if (Math.abs(applyDeadzone(y, deadzone)) > 0) {
             if (y > 0) {
                 this.movement.backward = Math.abs(y);
             } else {
@@ -81,7 +105,7 @@ window.AFRAME.registerComponent('fly', {
         }
 
         // X-axis: Turning or Strafing based on mode
-        if (Math.abs(x) > deadzone) {
+        if (Math.abs(applyDeadzone(x, deadzone)) > 0) {
             if (this.data.strafeTurning) {
                 // Strafe mode - left/right movement
                 if (x > 0) {
@@ -103,6 +127,10 @@ window.AFRAME.registerComponent('fly', {
     // Joystick click - toggle strafe turning
     onJoystickClick: function (evt) {
         this.data.strafeTurning = !this.data.strafeTurning;
+        emitXrEvent(this.el, 'locomotion-mode-changed', {
+            component: 'fly',
+            strafeTurning: this.data.strafeTurning
+        });
     },
 
     // Trigger pressure control for speed
@@ -151,24 +179,40 @@ window.AFRAME.registerComponent('fly', {
 
             // Apply movement to camera rig
             this.cameraRig.object3D.position.add(this.vector);
+            emitXrEvent(this.el, 'locomotion-step', {
+                dx: this.vector.x,
+                dy: this.vector.y,
+                dz: this.vector.z,
+                mode: 'fly-forward'
+            });
         }
 
         // Strafing movement (left/right relative to camera)
         if (this.movement.strafeLeft > 0 || this.movement.strafeRight > 0) {
             // Get camera's right direction (cross product of forward and up)
             this.camera.object3D.getWorldDirection(this.vector);
-            const right = new THREE.Vector3().crossVectors(this.vector, new THREE.Vector3(0, 1, 0)).normalize();
+            this.right.crossVectors(this.vector, this.up).normalize();
 
             // Move in camera's right direction (fixed direction: left should be negative, right should be positive)
-            right.multiplyScalar((this.movement.strafeLeft - this.movement.strafeRight) * speed);
+            this.right.multiplyScalar((this.movement.strafeLeft - this.movement.strafeRight) * speed);
 
             // Apply strafe movement to camera rig
-            this.cameraRig.object3D.position.add(right);
+            this.cameraRig.object3D.position.add(this.right);
+            emitXrEvent(this.el, 'locomotion-step', {
+                dx: this.right.x,
+                dy: this.right.y,
+                dz: this.right.z,
+                mode: 'fly-strafe'
+            });
         }
 
         // Turning (rotate the camera rig)
         if (this.movement.rotateLeft > 0 || this.movement.rotateRight > 0) {
-            this.cameraRig.object3D.rotateY((this.movement.rotateLeft - this.movement.rotateRight) * rotSpeed);
+            const yaw = (this.movement.rotateLeft - this.movement.rotateRight) * rotSpeed;
+            this.cameraRig.object3D.rotateY(yaw);
+            emitXrEvent(this.el, 'turn-smooth-step', {
+                yawDeg: THREE.MathUtils.radToDeg(yaw)
+            }, 'smoothturnstep');
         }
     },
 
@@ -182,8 +226,14 @@ window.AFRAME.registerComponent('fly', {
         // Full grip (>0.8) = fly up, half grip (0.3-0.8) = fly down
         if (this.gripPressure > 0) {
             // Full grip - fly straight up
-            const verticalMove = new THREE.Vector3(0, speed * this.gripPressure, 0);
-            this.cameraRig.object3D.position.add(verticalMove);
+            this.verticalMove.set(0, speed * this.gripPressure, 0);
+            this.cameraRig.object3D.position.add(this.verticalMove);
+            emitXrEvent(this.el, 'locomotion-step', {
+                dx: this.verticalMove.x,
+                dy: this.verticalMove.y,
+                dz: this.verticalMove.z,
+                mode: 'fly-vertical'
+            });
         }
     },
 

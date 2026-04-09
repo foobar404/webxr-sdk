@@ -1,3 +1,5 @@
+import { emitXrEvent } from './core-utils.js';
+
 AFRAME.registerSystem('gravity', {
     schema: {
         // entities selected will be affected (default: ".rigid")
@@ -22,9 +24,15 @@ AFRAME.registerSystem('gravity', {
 
         const g = this.data.gravity;
         const damping = this.data.damping;
+        const staleBodies = [];
 
         // Iterate all registered rigid bodies
         this.bodies.forEach(el => {
+            if (!el || !el.isConnected) {
+                staleBodies.push(el);
+                return;
+            }
+
             const c = el.components['rigid-body'];
             if (!c || !c.data.enabled) return;
 
@@ -72,9 +80,19 @@ AFRAME.registerSystem('gravity', {
                         // Very crude friction against ground (tangent damping)
                         vel.x *= (1 - data.friction);
                         vel.z *= (1 - data.friction);
+
+                        emitXrEvent(el, 'physics-ground-contact', {
+                            y: o3d.position.y,
+                            restitution: data.restitution,
+                            friction: data.friction
+                        });
                     }
                 }
             }
         });
+
+        for (let i = 0; i < staleBodies.length; i++) {
+            this.bodies.delete(staleBodies[i]);
+        }
     }
 });

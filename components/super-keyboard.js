@@ -1,6 +1,6 @@
 /* global AFRAME */
 var KEYBOARDS = {
-  superkeyboard: {wrapCount: 30, inputOffsetY: 0.008, inputOffsetX: 0.08, img: 'keyboard.png', hoverImg: 'keyboard-hover.png', layout: [{'key': '1', 'x': 0.013, 'y': 0.03, 'w': 0.093, 'h': 0.176}, {'key': '2', 'x': 0.106, 'y': 0.03, 'w': 0.088, 'h': 0.176}, {'key': '3', 'x': 0.194, 'y': 0.03, 'w': 0.077, 'h': 0.176}, {'key': '4', 'x': 0.271, 'y': 0.03, 'w': 0.085, 'h': 0.176}, {'key': '5', 'x': 0.356, 'y': 0.03, 'w': 0.081, 'h': 0.176}, {'key': '6', 'x': 0.437, 'y': 0.03, 'w': 0.081, 'h': 0.176}, {'key': '8', 'x': 0.603, 'y': 0.03, 'w': 0.082, 'h': 0.176}, {'key': '7', 'x': 0.519, 'y': 0.03, 'w': 0.084, 'h': 0.176}, {'key': '9', 'x': 0.685, 'y': 0.03, 'w': 0.076, 'h': 0.176}, {'key': '0', 'x': 0.76, 'y': 0.03, 'w': 0.088, 'h': 0.176}, {'key': 'Delete', 'x': 0.867, 'y': 0.03, 'w': 0.124, 'h': 0.176}, {'key': 'q', 'x': 0.013, 'y': 0.213, 'w': 0.098, 'h': 0.186}, {'key': 'w', 'x': 0.111, 'y': 0.213, 'w': 0.107, 'h': 0.186}, {'key': 'e', 'x': 0.218, 'y': 0.213, 'w': 0.096, 'h': 0.186}, {'key': 'r', 'x': 0.313, 'y': 0.213, 'w': 0.095, 'h': 0.186}, {'key': 't', 'x': 0.408, 'y': 0.213, 'w': 0.094, 'h': 0.186}, {'key': 'y', 'x': 0.503, 'y': 0.213, 'w': 0.099, 'h': 0.186}, {'key': 'u', 'x': 0.602, 'y': 0.213, 'w': 0.097, 'h': 0.186}, {'key': 'i', 'x': 0.701, 'y': 0.213, 'w': 0.085, 'h': 0.186}, {'key': 'o', 'x': 0.786, 'y': 0.213, 'w': 0.099, 'h': 0.186}, {'key': 'p', 'x': 0.885, 'y': 0.213, 'w': 0.097, 'h': 0.186}, {'key': 'a', 'x': 0.063, 'y': 0.408, 'w': 0.1, 'h': 0.182}, {'key': 's', 'x': 0.163, 'y': 0.408, 'w': 0.097, 'h': 0.182}, {'key': 'd', 'x': 0.26, 'y': 0.408, 'w': 0.098, 'h': 0.182}, {'key': 'f', 'x': 0.358, 'y': 0.408, 'w': 0.094, 'h': 0.182}, {'key': 'g', 'x': 0.452, 'y': 0.408, 'w': 0.1, 'h': 0.182}, {'key': 'h', 'x': 0.552, 'y': 0.408, 'w': 0.105, 'h': 0.182}, {'key': 'j', 'x': 0.657, 'y': 0.408, 'w': 0.085, 'h': 0.182}, {'key': 'k', 'x': 0.743, 'y': 0.408, 'w': 0.105, 'h': 0.182}, {'key': 'l', 'x': 0.848, 'y': 0.408, 'w': 0.1, 'h': 0.182}, {'key': 'z', 'x': 0.107, 'y': 0.596, 'w': 0.106, 'h': 0.197}, {'key': 'x', 'x': 0.213, 'y': 0.596, 'w': 0.1, 'h': 0.197}, {'key': 'c', 'x': 0.313, 'y': 0.596, 'w': 0.093, 'h': 0.197}, {'key': 'v', 'x': 0.406, 'y': 0.596, 'w': 0.096, 'h': 0.197}, {'key': 'b', 'x': 0.502, 'y': 0.596, 'w': 0.093, 'h': 0.197}, {'key': 'n', 'x': 0.595, 'y': 0.596, 'w': 0.099, 'h': 0.197}, {'key': 'm', 'x': 0.694, 'y': 0.596, 'w': 0.106, 'h': 0.197}, {'key': ' ', 'x': 0.372, 'y': 0.798, 'w': 0.249, 'h': 0.169}, {'key': 'Insert', 'x': 0.017, 'y': -0.001, 'w': 0.038, 'h': 0.018}]}
+  superkeyboard: {wrapCount: 30, inputOffsetY: 0.008, inputOffsetX: 0.08, img: 'demo.png', hoverImg: 'demo.png', layout: [{'key': '1', 'x': 0.013, 'y': 0.03, 'w': 0.093, 'h': 0.176}, {'key': '2', 'x': 0.106, 'y': 0.03, 'w': 0.088, 'h': 0.176}, {'key': '3', 'x': 0.194, 'y': 0.03, 'w': 0.077, 'h': 0.176}, {'key': '4', 'x': 0.271, 'y': 0.03, 'w': 0.085, 'h': 0.176}, {'key': '5', 'x': 0.356, 'y': 0.03, 'w': 0.081, 'h': 0.176}, {'key': '6', 'x': 0.437, 'y': 0.03, 'w': 0.081, 'h': 0.176}, {'key': '8', 'x': 0.603, 'y': 0.03, 'w': 0.082, 'h': 0.176}, {'key': '7', 'x': 0.519, 'y': 0.03, 'w': 0.084, 'h': 0.176}, {'key': '9', 'x': 0.685, 'y': 0.03, 'w': 0.076, 'h': 0.176}, {'key': '0', 'x': 0.76, 'y': 0.03, 'w': 0.088, 'h': 0.176}, {'key': 'Delete', 'x': 0.867, 'y': 0.03, 'w': 0.124, 'h': 0.176}, {'key': 'q', 'x': 0.013, 'y': 0.213, 'w': 0.098, 'h': 0.186}, {'key': 'w', 'x': 0.111, 'y': 0.213, 'w': 0.107, 'h': 0.186}, {'key': 'e', 'x': 0.218, 'y': 0.213, 'w': 0.096, 'h': 0.186}, {'key': 'r', 'x': 0.313, 'y': 0.213, 'w': 0.095, 'h': 0.186}, {'key': 't', 'x': 0.408, 'y': 0.213, 'w': 0.094, 'h': 0.186}, {'key': 'y', 'x': 0.503, 'y': 0.213, 'w': 0.099, 'h': 0.186}, {'key': 'u', 'x': 0.602, 'y': 0.213, 'w': 0.097, 'h': 0.186}, {'key': 'i', 'x': 0.701, 'y': 0.213, 'w': 0.085, 'h': 0.186}, {'key': 'o', 'x': 0.786, 'y': 0.213, 'w': 0.099, 'h': 0.186}, {'key': 'p', 'x': 0.885, 'y': 0.213, 'w': 0.097, 'h': 0.186}, {'key': 'a', 'x': 0.063, 'y': 0.408, 'w': 0.1, 'h': 0.182}, {'key': 's', 'x': 0.163, 'y': 0.408, 'w': 0.097, 'h': 0.182}, {'key': 'd', 'x': 0.26, 'y': 0.408, 'w': 0.098, 'h': 0.182}, {'key': 'f', 'x': 0.358, 'y': 0.408, 'w': 0.094, 'h': 0.182}, {'key': 'g', 'x': 0.452, 'y': 0.408, 'w': 0.1, 'h': 0.182}, {'key': 'h', 'x': 0.552, 'y': 0.408, 'w': 0.105, 'h': 0.182}, {'key': 'j', 'x': 0.657, 'y': 0.408, 'w': 0.085, 'h': 0.182}, {'key': 'k', 'x': 0.743, 'y': 0.408, 'w': 0.105, 'h': 0.182}, {'key': 'l', 'x': 0.848, 'y': 0.408, 'w': 0.1, 'h': 0.182}, {'key': 'z', 'x': 0.107, 'y': 0.596, 'w': 0.106, 'h': 0.197}, {'key': 'x', 'x': 0.213, 'y': 0.596, 'w': 0.1, 'h': 0.197}, {'key': 'c', 'x': 0.313, 'y': 0.596, 'w': 0.093, 'h': 0.197}, {'key': 'v', 'x': 0.406, 'y': 0.596, 'w': 0.096, 'h': 0.197}, {'key': 'b', 'x': 0.502, 'y': 0.596, 'w': 0.093, 'h': 0.197}, {'key': 'n', 'x': 0.595, 'y': 0.596, 'w': 0.099, 'h': 0.197}, {'key': 'm', 'x': 0.694, 'y': 0.596, 'w': 0.106, 'h': 0.197}, {'key': ' ', 'x': 0.372, 'y': 0.798, 'w': 0.249, 'h': 0.169}, {'key': 'Insert', 'x': 0.017, 'y': -0.001, 'w': 0.038, 'h': 0.018}]}
 };
 
 if (typeof AFRAME === 'undefined') {
@@ -27,7 +27,7 @@ AFRAME.registerComponent('super-keyboard', {
     // roboto aileronsemibold dejavu exo2bold exo2semibold kelsonsans monoid sourcecodepro
     font: {default: 'aileronsemibold'},
     hand: {type: 'selector'},
-    imagePath: {default: '.'},
+    imagePath: {default: '/assets'},
     injectToRaycasterObjects: {default: true},
     inputColor: {type: 'color', default: '#6699ff'},
     interval: {type: 'int', default: 50},
@@ -38,7 +38,7 @@ AFRAME.registerComponent('super-keyboard', {
     label: {type: 'string', default: ''},
     labelColor: {type: 'color', default: '#aaa'},
     maxLength: {type: 'int', default: 0},
-    model: {default: 'basic'},
+    model: {default: 'superkeyboard'},
     show: {default: true},
     multipleInputs: {default: false},
     value: {type: 'string', default: ''},
@@ -46,7 +46,15 @@ AFRAME.registerComponent('super-keyboard', {
   },
 
   init: function () {
-    this.el.addEventListener('click', this.click.bind(this));
+    this._onClick = this.click.bind(this);
+    this._onHover = this.hover.bind(this);
+    this._onBlur = this.blur.bind(this);
+    this._onOpen = this.open.bind(this);
+    this._onTestKeydown = this._onTestKeydown || null;
+    this._onHandLoaded = this.setupHand.bind(this);
+    this._pendingHandLoadTarget = null;
+
+    this.el.addEventListener('click', this._onClick);
     this.changeEventDetail = {};
     this.textInputObject = {};
 
@@ -66,8 +74,8 @@ AFRAME.registerComponent('super-keyboard', {
     this.kbImg = document.createElement('a-entity');
     this.kbImg.classList.add('keyboardRaycastable');
     this.kbImg.classList.add('superKeyboardImage');
-    this.kbImg.addEventListener('raycaster-intersected', this.hover.bind(this));
-    this.kbImg.addEventListener('raycaster-intersected-cleared', this.blur.bind(this));
+    this.kbImg.addEventListener('raycaster-intersected', this._onHover);
+    this.kbImg.addEventListener('raycaster-intersected-cleared', this._onBlur);
     this.el.appendChild(this.kbImg);
 
     // Create label.
@@ -110,7 +118,7 @@ AFRAME.registerComponent('super-keyboard', {
     this.keyPressColor = new THREE.Color();
 
     var self = this;
-    document.addEventListener('keydown', function (ev) {
+    this._onTestKeydown = function (ev) {
       if (ev.key === 't') {
         var ss = '';
         var s = 'abcdefghijklmopqrstuvQWIEUTGASDLIGKBXACQWETL102394676457';
@@ -118,9 +126,10 @@ AFRAME.registerComponent('super-keyboard', {
         for (var i = 0; i < l; i++) ss += s[Math.floor(Math.random() * s.length)];
         self.el.setAttribute('super-keyboard', {value: ss});
       }
-    });
+    };
+    document.addEventListener('keydown', this._onTestKeydown);
 
-    document.addEventListener('show', this.open.bind(this));
+    document.addEventListener('show', this._onOpen);
 
     this.hand = null;
     this.handListenersSet = false;
@@ -337,9 +346,19 @@ AFRAME.registerComponent('super-keyboard', {
       console.error('super-keyboard: no controller found. Add <a-entity> with controller or specify with super-keyboard="hand: #selectorToController".');
     } else {
       if (!this.hand.hasLoaded) {
-        this.hand.addEventListener('loaded', this.setupHand.bind(this));
+        if (this._pendingHandLoadTarget && this._pendingHandLoadTarget !== this.hand) {
+          this._pendingHandLoadTarget.removeEventListener('loaded', this._onHandLoaded);
+        }
+        this._pendingHandLoadTarget = this.hand;
+        this.hand.addEventListener('loaded', this._onHandLoaded);
         return;
       }
+
+      if (this._pendingHandLoadTarget) {
+        this._pendingHandLoadTarget.removeEventListener('loaded', this._onHandLoaded);
+        this._pendingHandLoadTarget = null;
+      }
+
       var raycaster = this.hand.components['raycaster'];
       var params = {};
 
@@ -569,6 +588,28 @@ AFRAME.registerComponent('super-keyboard', {
   updateTextInput: function (value) {
     this.textInputObject.value = value || this.data.value;
     this.textInput.setAttribute('text', this.textInputObject);
+  },
+
+  remove: function () {
+    this.stopBlinking();
+
+    this.el.removeEventListener('click', this._onClick);
+    if (this.kbImg) {
+      this.kbImg.removeEventListener('raycaster-intersected', this._onHover);
+      this.kbImg.removeEventListener('raycaster-intersected-cleared', this._onBlur);
+    }
+
+    if (this._onTestKeydown) {
+      document.removeEventListener('keydown', this._onTestKeydown);
+    }
+    if (this._onOpen) {
+      document.removeEventListener('show', this._onOpen);
+    }
+
+    if (this._pendingHandLoadTarget && this._onHandLoaded) {
+      this._pendingHandLoadTarget.removeEventListener('loaded', this._onHandLoaded);
+      this._pendingHandLoadTarget = null;
+    }
   }
 });
 

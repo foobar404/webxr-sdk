@@ -10,7 +10,8 @@
 </head>
 
 <body>
-    <a-scene environment xr-mode-ui="XRMode:vr;" webxr="requiredFeatures: local-floor; optionalFeatures: bounded-floor">
+    <a-scene inspector="url: https://cdn.jsdelivr.net/gh/foobar404/aframe-engine@main/dist/aframe-engine.min.js"
+        environment xr-mode-ui="XRMode:vr;" webxr="requiredFeatures: local-floor; optionalFeatures: bounded-floor">
         <a-assets></a-assets>
 
         <a-entity id="rig">
@@ -19,9 +20,9 @@
             <a-entity oculus-touch-controls="hand:right;"></a-entity>
         </a-entity>
 
-        <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-        <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-        <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+        <a-box id="box" position="-1 1.52317 -3" rotation="-34.02108795927802 31.445642670164972 42.457318534784264" color="#4CC3D9"></a-box>
+        <a-sphere id="sphere" position="0 4.45581 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+        <a-cylinder id="cylinder" position="2.56318 1.68791 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
     </a-scene>
 </body>
 

@@ -14,6 +14,7 @@ AFRAME.registerComponent('phone-controls', {
         this._euler = new THREE.Euler();
         this._q0 = new THREE.Quaternion();
         this._qOffset = new THREE.Quaternion(); // yaw offset
+        this._sensorsBound = false;
 
         this._onOrient = () => { this._orient = (screen.orientation && screen.orientation.angle) ? THREE.MathUtils.degToRad(screen.orientation.angle) : 0; };
         window.addEventListener('orientationchange', this._onOrient);
@@ -30,26 +31,40 @@ AFRAME.registerComponent('phone-controls', {
         // Permission flow (iOS 13+)
         const btn = document.getElementById('enable');
         const gate = document.getElementById('perm');
-        const bindSensors = () => {
+        this._bindSensors = () => {
             if (typeof DeviceOrientationEvent !== 'undefined' &&
                 typeof DeviceOrientationEvent.requestPermission === 'function') {
                 DeviceOrientationEvent.requestPermission().then(state => {
                     if (state === 'granted') {
+                        if (this._sensorsBound) return;
                         window.addEventListener('deviceorientation', this._onDO, true);
-                        gate.style.display = 'none';
+                        this._sensorsBound = true;
+                        if (gate) gate.style.display = 'none';
                     }
                 }).catch(() => { /* ignored */ });
             } else {
                 // Android / desktop with sensors
+                if (this._sensorsBound) return;
                 window.addEventListener('deviceorientation', this._onDO, true);
-                gate.style.display = 'none';
+                this._sensorsBound = true;
+                if (gate) gate.style.display = 'none';
             }
         };
-        btn.addEventListener('click', bindSensors);
+
+        if (btn) {
+            btn.addEventListener('click', this._bindSensors);
+        } else {
+            this._bindSensors();
+        }
     },
     remove() {
         window.removeEventListener('orientationchange', this._onOrient);
         window.removeEventListener('deviceorientation', this._onDO, true);
+        this._sensorsBound = false;
+        const btn = document.getElementById('enable');
+        if (btn && this._bindSensors) {
+            btn.removeEventListener('click', this._bindSensors);
+        }
     },
     update(oldData) {
         // yaw offset in radians -> quaternion about Y
